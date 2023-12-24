@@ -13,8 +13,8 @@ function Login() {
       <Paper sx={{gap:4, display:"grid", px:".7rem", py:"1rem"}}>
         <Typography sx={{ fontWeight: "bold",fontSize:"1.5rem"  }}>Sign In</Typography>
         <form autoComplete="off" noValidate>
-          <FormLabel sx={{ fontWeight: "bold",fontSize:"1rem"  }}>Username</FormLabel>
-          <TextField variant="outlined" fullWidth  margin="dense" size="small" placeholder="John Doe"/>
+          {/* <FormLabel sx={{ fontWeight: "bold",fontSize:"1rem"  }}>Username</FormLabel>
+          <TextField variant="outlined" fullWidth  margin="dense" size="small" placeholder="John Doe"/> */}
           <FormLabel sx={{ fontWeight: "bold",fontSize:"1rem" }}>Email</FormLabel>
           <TextField variant="outlined" type="email" fullWidth  margin="dense" size="small" placeholder="johndoe@gmail.com"/>
           <FormLabel   sx={{ fontWeight: "bold",fontSize:"1rem" }}>Password</FormLabel>
