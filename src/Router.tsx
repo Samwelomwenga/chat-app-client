@@ -9,6 +9,7 @@ const Router=()=>{
         [
             {path:"/",element:<Login/>},
             {path:"/register",element:<Register/>},
+            {path:"/login",element:<Login/>},
             {path:"/chat",element:<ChatApp/>}
         ]
         
