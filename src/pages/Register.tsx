@@ -1,17 +1,16 @@
 import { Button, TextField, Typography, Paper, FormLabel, Link, Stack } from "@mui/material";
 import {Google as GoogleIcon,Facebook} from '@mui/icons-material';
-
-function App() {
+function Register() {
   return (
     <Stack spacing={2} sx={{display:"grid",justifyContent:"center", gap:"1rem",width:"100%",px:".6rem"}}> 
     <Stack>
-      <Typography variant="h3" sx={{py:"1rem", fontWeight:"bold"}}>Login</Typography>
+      <Typography variant="h3" sx={{py:"1rem", fontWeight:"bold"}}>Sign Up</Typography>
       <Typography variant="body1">
-        Enter your username and password to login to your account
+        Create an account to get started
       </Typography>
       </Stack>
       <Paper sx={{gap:4, display:"grid", px:".7rem", py:"1rem"}}>
-        <Typography sx={{ fontWeight: "bold",fontSize:"1.5rem"  }}>Sign In</Typography>
+        <Typography sx={{ fontWeight: "bold",fontSize:"1.5rem"  }}>Create Account</Typography>
         <form autoComplete="off" noValidate>
           <FormLabel sx={{ fontWeight: "bold",fontSize:"1rem"  }}>Username</FormLabel>
           <TextField variant="outlined" fullWidth  margin="dense" size="small" placeholder="John Doe"/>
@@ -19,15 +18,16 @@ function App() {
           <TextField variant="outlined" type="email" fullWidth  margin="dense" size="small" placeholder="johndoe@gmail.com"/>
           <FormLabel   sx={{ fontWeight: "bold",fontSize:"1rem" }}>Password</FormLabel>
           <TextField variant="outlined" type="password" fullWidth margin="dense" size="small"/>
-        <Button variant="contained" fullWidth sx={{my:"1rem"}}>Login</Button>
-        <Button variant="outlined" fullWidth startIcon={<GoogleIcon/>}>  Login with Google</Button>
-        <Button variant="outlined" fullWidth startIcon={<Facebook/> } sx={{my:"1rem"}}>Login with Facebook </Button>
-        <Link sx={{pl:"5rem"}}> Forgot Your Password?</Link>
+          <FormLabel   sx={{ fontWeight: "bold",fontSize:"1rem" }}>Confirm Password</FormLabel>
+          <TextField variant="outlined" type="password" fullWidth margin="dense" size="small"/>
+        <Button variant="contained" fullWidth sx={{my:"1rem"}}>Sign Up</Button>
+        <Button variant="outlined" fullWidth startIcon={<GoogleIcon/>}>  Sign Up with Google</Button>
+        <Button variant="outlined" fullWidth startIcon={<Facebook/> } sx={{my:"1rem"}}>Sign Up with Facebook </Button>
+        <Link sx={{pl:"5rem"}}>Already have an account? Login here</Link>
         </form>
 
       </Paper>
     </Stack>
-  );
+  )
 }
-
-export default App;
+export default Register
