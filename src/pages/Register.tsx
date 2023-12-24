@@ -4,8 +4,8 @@ function Register() {
   return (
     <Stack spacing={2} sx={{display:"grid",justifyContent:"center", gap:"1rem",width:"100%",px:".6rem"}}> 
     <Stack>
-      <Typography variant="h3" sx={{py:"1rem", fontWeight:"bold"}}>Sign Up</Typography>
-      <Typography variant="body1">
+      <Typography variant="h4" sx={{py:"1rem", fontWeight:"bold",textAlign:"center"}}>Sign Up</Typography>
+      <Typography variant="body1"  sx={{textAlign:"center"}}>
         Create an account to get started
       </Typography>
       </Stack>
