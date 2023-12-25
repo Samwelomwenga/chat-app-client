@@ -1,6 +1,10 @@
+// import { useContext } from "react";
 import { Button, TextField, Typography, Paper, FormLabel, Link, Stack } from "@mui/material";
 import {Google as GoogleIcon,Facebook} from '@mui/icons-material';
+// import { AuthContext } from "../context/AuthContext";
 function Register() {
+
+  //  const context= useContext(AuthContext)
   return (
     <Stack spacing={2} sx={{display:"grid",justifyContent:"center", gap:"1rem",width:"100%",px:".6rem"}}> 
     <Stack>
@@ -23,7 +27,7 @@ function Register() {
         <Button variant="contained" fullWidth sx={{my:"1rem"}}>Sign Up</Button>
         <Button variant="outlined" fullWidth startIcon={<GoogleIcon/>}>  Sign Up with Google</Button>
         <Button variant="outlined" fullWidth startIcon={<Facebook/> } sx={{my:"1rem"}}>Sign Up with Facebook </Button>
-        <Link sx={{pl:"5rem"}}>Already have an account? Login here</Link>
+        <Link sx={{pl:"3rem"}}>Already have an account? Login here</Link>
         </form>
 
       </Paper>
