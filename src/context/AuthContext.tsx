@@ -1,17 +1,28 @@
-import { createContext,ReactNode} from "react";
-
+import { createContext,ReactNode,useReducer} from "react";
+import userInfoReducer from "../utils/functions/userInfoReducer"
+import { Action } from "../utils/functions/userInfoReducer";
 type AuthContextProps={
     children:ReactNode;
 }
-type User={
+export type InitialState={
     name:string;
+    email:string;
+    password:string;
 }
 
-export const AuthContext=createContext<User|null>(null);
-export const AuthProvider=({children}:AuthContextProps)=>{
+type AuthState={
+    state:InitialState|null;
+    dispatch:React.Dispatch<Action>;
+}
 
-    const user={
-        name:"sam"
+export const AuthContext=createContext<AuthState|null>(null);
+export const AuthProvider=({children}:AuthContextProps)=>{
+    const initialState:InitialState={
+        name:"",
+        email:"",
+        password:"",
     }
-    return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>
+const [ state,dispatch]=useReducer(userInfoReducer, initialState);
+
+    return <AuthContext.Provider value={{state,dispatch}}>{children}</AuthContext.Provider>
 }

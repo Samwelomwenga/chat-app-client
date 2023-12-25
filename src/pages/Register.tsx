@@ -1,10 +1,13 @@
-// import { useContext } from "react";
+import { useContext } from "react";
 import { Button, TextField, Typography, Paper, FormLabel, Link, Stack } from "@mui/material";
 import {Google as GoogleIcon,Facebook} from '@mui/icons-material';
-// import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 function Register() {
 
-  //  const context= useContext(AuthContext)
+   const context= useContext(AuthContext)
+   console.log(context?.state)
+  //  const state=context?.state;
+    const dispatch=context?.dispatch;
   return (
     <Stack spacing={2} sx={{display:"grid",justifyContent:"center", gap:"1rem",width:"100%",px:".6rem"}}> 
     <Stack>
@@ -17,7 +20,10 @@ function Register() {
         <Typography sx={{ fontWeight: "bold",fontSize:"1.5rem"  }}>Create Account</Typography>
         <form autoComplete="off" noValidate>
           <FormLabel sx={{ fontWeight: "bold",fontSize:"1rem"  }}>Username</FormLabel>
-          <TextField variant="outlined" fullWidth  margin="dense" size="small" placeholder="John Doe"/>
+          <TextField variant="outlined" fullWidth  margin="dense" size="small" placeholder="John Doe" onChange={(e)=>{
+            console.log(e.target.value)
+            dispatch?.({type:"SET_NAME",payload:e.target.value})
+          }}/>
           <FormLabel sx={{ fontWeight: "bold",fontSize:"1rem" }}>Email</FormLabel>
           <TextField variant="outlined" type="email" fullWidth  margin="dense" size="small" placeholder="johndoe@gmail.com"/>
           <FormLabel   sx={{ fontWeight: "bold",fontSize:"1rem" }}>Password</FormLabel>
