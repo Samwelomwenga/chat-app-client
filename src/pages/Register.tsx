@@ -2,12 +2,21 @@ import { useContext } from "react";
 import { Button, TextField, Typography, Paper, FormLabel, Link, Stack } from "@mui/material";
 import {Google as GoogleIcon,Facebook} from '@mui/icons-material';
 import { AuthContext } from "../context/AuthContext";
+import { baseUrl, registerUser } from "../utils/services";
 function Register() {
 
    const context= useContext(AuthContext)
-   const state=context?.state;
-   const dispatch=context?.dispatch;
-    console.log(state)
+   const userInfo=context?.userInfo;
+   const userInfoDispatch=context?.userInfoDispatch;
+    // console.log(state)
+    const handleRegisterUser=async ()=>{
+      if (userInfo) {
+        const res= await registerUser(`${baseUrl}/users/register`,userInfo)
+        res.error&&
+        
+      }
+    }
+
   return (
     <Stack spacing={2} sx={{display:"grid",justifyContent:"center", gap:"1rem",width:"100%",px:".6rem"}}> 
     <Stack>
@@ -21,17 +30,17 @@ function Register() {
         <form autoComplete="off" noValidate>
           <FormLabel sx={{ fontWeight: "bold",fontSize:"1rem"  }}>Username</FormLabel>
           <TextField variant="outlined" fullWidth  margin="dense" size="small" placeholder="John Doe" onChange={(e)=>{
-            dispatch?.({type:"SET_NAME",payload:e.target.value})
+            userInfoDispatch?.({type:"SET_NAME",payload:e.target.value})
           }}/>
           <FormLabel sx={{ fontWeight: "bold",fontSize:"1rem" }}>Email</FormLabel>
           <TextField variant="outlined" type="email" fullWidth  margin="dense" size="small" placeholder="johndoe@gmail.com" onChange={(e)=>{
-            dispatch?.({type:"SET_EMAIL",payload:e.target.value})
+            userInfoDispatch?.({type:"SET_EMAIL",payload:e.target.value})
           }}/>
           <FormLabel   sx={{ fontWeight: "bold",fontSize:"1rem" }}>Password</FormLabel>
           <TextField variant="outlined" type="password" fullWidth margin="dense" size="small"/>
           <FormLabel   sx={{ fontWeight: "bold",fontSize:"1rem" }}>Confirm Password</FormLabel>
           <TextField variant="outlined" type="password" fullWidth margin="dense" size="small" onChange={(e)=>{
-            dispatch?.({type:"SET_PASSWORD",payload:e.target.value})
+            userInfoDispatch?.({type:"SET_PASSWORD",payload:e.target.value})
           }}/>
         <Button variant="contained" fullWidth sx={{my:"1rem"}}>Sign Up</Button>
         <Button variant="outlined" fullWidth startIcon={<GoogleIcon/>}>  Sign Up with Google</Button>
