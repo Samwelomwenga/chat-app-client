@@ -5,17 +5,17 @@ import { InitialState } from "../../context/AuthContext";
     };
 const userInfoReducer = (state: InitialState, action:Action) => {  
     switch (action.type) {
-        case "USER_NAME":
+        case "SET_NAME":
         return {
             ...state,
             name: action.payload,
         };
-        case "USER_EMAIL":{ 
+        case "SET_EMAIL":{ 
             return {
             ...state,
             email: action.payload,
         };}
-        case "USER_PASSWORD":
+        case "SET_PASSWORD":
         {return {
             ...state,
             password: action.payload,
