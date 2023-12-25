@@ -4,20 +4,20 @@ import { Action } from "../utils/functions/userInfoReducer";
 type AuthContextProps={
     children:ReactNode;
 }
-export type InitialState={
+export type UserInfoState={
     name:string;
     email:string;
     password:string;
 }
 
 type AuthState={
-    state:InitialState|null;
+    state:UserInfoState|null;
     dispatch:React.Dispatch<Action>;
 }
 
 export const AuthContext=createContext<AuthState|null>(null);
 export const AuthProvider=({children}:AuthContextProps)=>{
-    const initialState:InitialState={
+    const initialState:UserInfoState={
         name:"",
         email:"",
         password:"",

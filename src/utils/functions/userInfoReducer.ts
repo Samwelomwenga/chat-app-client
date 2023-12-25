@@ -1,9 +1,9 @@
-import { InitialState } from "../../context/AuthContext";
+import { UserInfoState } from "../../context/AuthContext";
  export type Action = {
     type: string;
     payload: string;
     };
-const userInfoReducer = (state: InitialState, action:Action) => {  
+const userInfoReducer = (state: UserInfoState, action:Action) => {  
     switch (action.type) {
         case "SET_NAME":
         return {
