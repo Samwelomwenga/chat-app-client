@@ -8,12 +8,18 @@ function Register() {
    const context= useContext(AuthContext)
    const userInfo=context?.userInfo;
    const userInfoDispatch=context?.userInfoDispatch;
+   const postDispatch=context?.postDispatch;
     // console.log(state)
     const handleRegisterUser=async ()=>{
+      postDispatch?.({type: "POST_USER_INFO_REQUEST"});
       if (userInfo) {
         const res= await registerUser(`${baseUrl}/users/register`,userInfo)
-        res.error&&
-        
+        if (res.error) {
+          postDispatch?.({type: "POST_USER_INFO_FAIL", payload: res.error});
+        }
+        localStorage.setItem("user",JSON.stringify(res))
+        postDispatch?.({type: "POST_USER_INFO_SUCCESS", payload: res});
+
       }
     }
 
