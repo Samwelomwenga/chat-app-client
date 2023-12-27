@@ -1,7 +1,11 @@
 import { Button, TextField, Typography, Paper, FormLabel, Link, Stack } from "@mui/material";
 import {Google as GoogleIcon,Facebook} from '@mui/icons-material';
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 function Login() {
+  const user = useContext(AuthContext)?.postState.user;
+  console.log("Luser",user)
   return (
     <Stack spacing={2} sx={{display:"grid",justifyContent:"center", gap:"1rem",width:"100%",px:".6rem"}}> 
     <Stack>

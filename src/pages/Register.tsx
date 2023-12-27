@@ -1,4 +1,4 @@
-import React, { useContext,useState } from "react";
+import React, { useContext,useEffect,useState } from "react";
 import { Button, TextField, Typography, Paper, FormLabel, Link, Stack } from "@mui/material";
 import {Google as GoogleIcon,Facebook} from '@mui/icons-material';
 import { AuthContext } from "../context/AuthContext";
@@ -13,7 +13,7 @@ function Register() {
    const userInfoDispatch=context?.userInfoDispatch;
    const postState=context?.postState;
    const postDispatch=context?.postDispatch;
-    console.log("POSTSTATEUSER", postState)
+    console.log("POSTSTATEUSER", postState?.user)
     const [response, setResponse] = useState<ResponseType|null>(null)
     response&&console.log("response",response)
 
@@ -34,6 +34,13 @@ function Register() {
 
       }
     }
+
+    useEffect(()=>{
+      const user=localStorage.getItem("user");
+       user&&postDispatch?.({type:"POST_USER_INFO_SUCCESS",payload:JSON.parse(user)})
+
+    },[postDispatch])
+
 
   return (
     <Stack spacing={2} sx={{display:"grid",justifyContent:"center", gap:"1rem",width:"100%",px:".6rem"}}> 
