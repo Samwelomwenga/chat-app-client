@@ -1,4 +1,4 @@
-import { createContext,ReactNode,useReducer} from "react";
+import { createContext,ReactNode,useEffect,useReducer} from "react";
 import userInfoReducer from "../utils/functions/userInfoReducer"
 import { Action } from "../utils/functions/userInfoReducer";
 import postUserInfoReducer, { PostUserInfoAction } from "../utils/functions/postUserInfoReducer";
@@ -49,6 +49,13 @@ export const AuthProvider=({children}:AuthContextProps)=>{
         loading:false,
     }
     const [postState,postDispatch]=useReducer(postUserInfoReducer,postUserInfoInitialState);
+
+    useEffect(()=>{
+        const user=localStorage.getItem("user");
+         user&&postDispatch?.({type:"POST_USER_INFO_SUCCESS",payload:JSON.parse(user)})
+  
+      },[postDispatch])
+  
 
     return <AuthContext.Provider value={{userInfo,userInfoDispatch,postState,postDispatch}}>{children}</AuthContext.Provider>
 }
