@@ -28,6 +28,7 @@ type AuthState={
     userInfoDispatch:React.Dispatch<Action>;
     postState:PostUserInfoState;
     postDispatch:React.Dispatch<PostUserInfoAction>;
+    logoutUser:()=>void;
 }
 
 export const AuthContext=createContext<AuthState|null>(null);
@@ -55,7 +56,16 @@ export const AuthProvider=({children}:AuthContextProps)=>{
          user&&postDispatch?.({type:"POST_USER_INFO_SUCCESS",payload:JSON.parse(user)})
   
       },[postDispatch])
+      const logoutUser=()=>{
+        localStorage.removeItem("User")
+        postDispatch?.({type:"POST_USER_INFO_RESET", payload:{
+            id:"",
+            name:"",
+            email:"",
+            token:"",
+        }})
+      }
   
 
-    return <AuthContext.Provider value={{userInfo,userInfoDispatch,postState,postDispatch}}>{children}</AuthContext.Provider>
+    return <AuthContext.Provider value={{userInfo,userInfoDispatch,postState,postDispatch,logoutUser}}>{children}</AuthContext.Provider>
 }

@@ -8,7 +8,8 @@ export type PostUserInfoAction =
     }
   |{type:"POST_USER_INFO_FAIL";
   payload:string;
-};
+}
+|{type:"POST_USER_INFO_RESET"; payload:UserPayload;};
 
 const postUserInfoReducer = (
   state: PostUserInfoState,
@@ -36,6 +37,14 @@ const postUserInfoReducer = (
         loading: false,
         error: action.payload,
       };
+    }
+    case "POST_USER_INFO_RESET":{
+        return {
+            ...state,
+            loading:false,
+            error:null,
+            user:action.payload,
+        }
     }
     default:
         return state;
