@@ -5,10 +5,10 @@ import ChatApp from "./pages/ChatApp";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { AuthContext } from "./context/AuthContext";
+import { CssBaseline } from "@mui/material";
 
 const Router=()=>{
   const user = useContext(AuthContext)?.postState.user;
-  console.log(user?.name);
 
     const BrowserRouter=createBrowserRouter(
         [
@@ -19,6 +19,8 @@ const Router=()=>{
         ]
         
     );
-    return <RouterProvider router={BrowserRouter}/>;
+    return <>
+    <CssBaseline/>
+    <RouterProvider router={BrowserRouter}/></>;
 }
 export default Router;
