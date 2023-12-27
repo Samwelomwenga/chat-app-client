@@ -11,10 +11,17 @@ export type UserInfoState={
     password:string;
 }
 export type PostUserInfoState={
-    user:string;
+    user:{
+        id:string;
+        name:string;
+        email:string;
+        token:string;
+
+    };
     error:string|null;
     loading:boolean;
 }
+export type UserPayload=Pick<PostUserInfoState["user"],"id"|"email"|"name"|"token">
 
 type AuthState={
     userInfo:UserInfoState|null;
@@ -32,7 +39,12 @@ export const AuthProvider=({children}:AuthContextProps)=>{
     }
     const [ userInfo,userInfoDispatch]=useReducer(userInfoReducer, userInfoInitialState);
     const postUserInfoInitialState:PostUserInfoState={
-        user:"",
+        user:{
+            id:"",
+            name:"",
+            email:"",
+            token:"",
+        },
         error:null,
         loading:false,
     }

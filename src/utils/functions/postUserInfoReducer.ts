@@ -1,11 +1,14 @@
-import { PostUserInfoState } from "../../context/AuthContext";
+import { PostUserInfoState, UserPayload } from "../../context/AuthContext";
 
 export type PostUserInfoAction =
   | { type: "POST_USER_INFO_REQUEST" }
   | {
-      type: "POST_USER_INFO_SUCCESS" | "POST_USER_INFO_FAIL";
-      payload: string;
-    };
+      type: "POST_USER_INFO_SUCCESS";
+      payload:UserPayload;
+    }
+  |{type:"POST_USER_INFO_FAIL";
+  payload:string;
+};
 
 const postUserInfoReducer = (
   state: PostUserInfoState,
