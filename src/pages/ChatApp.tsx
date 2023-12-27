@@ -2,6 +2,7 @@ import { useContext } from "react";
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardContent,
   InputAdornment,
@@ -14,8 +15,9 @@ import { AuthContext } from "../context/AuthContext";
 
 function ChatApp() {
 
-  const user= useContext(AuthContext)?.postState.user;
-  // const{name}=context&&context;
+  const context= useContext(AuthContext)
+  const user= context?.postState.user;
+  const logoutUser=context?.logoutUser;
 
 
   function stringToColor(string: string) {
@@ -48,10 +50,13 @@ function ChatApp() {
   }
   return (
     <Box sx={{height:"100vh", position:"relative"}}>
-      <Stack direction={"row"} spacing={2} sx={{bgcolor:"greenyellow",p:"1.5rem",mb:"1.5rem"}}>
+      <Box  sx={{bgcolor:"greenyellow",p:"1.5rem",mb:"1.5rem",width:"100%", display:"flex",gap:"5rem"}}>
+        <Box sx={{display:"flex",gap:2}}>
         <Avatar {...stringAvatar(user?.name||"Anonymous User")} />
         <Typography sx={{ textAlign: "center", fontWeight:"semi-bold", fontSize:"1.5rem" }}>{user?.name}</Typography>
-      </Stack>
+        </Box>
+        <Button  onClick={()=>logoutUser&&logoutUser()} variant="contained" sx={{mr:"auto"}}>Logout</Button>
+      </Box>
       <Stack sx={{px:".5rem"}}>
         <Card sx={{width:"75%",mb:"2rem",bgcolor:"red"}}>
             <CardContent>
