@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {
   Avatar,
   Box,
@@ -9,8 +10,14 @@ import {
   Typography,
 } from "@mui/material";
 import { SendRounded, BorderColorRounded } from "@mui/icons-material";
+import { AuthContext } from "../context/AuthContext";
 
 function ChatApp() {
+
+  const user= useContext(AuthContext)?.postState.user;
+  // const{name}=context&&context;
+
+
   function stringToColor(string: string) {
     let hash = 0;
     let i;
@@ -36,14 +43,14 @@ function ChatApp() {
       sx: {
         bgcolor: stringToColor(name),
       },
-      //   children: `${name.split(' ')[0][0]}${name.split(' ')[1] ? (name.split(' ')[1][0] ? name.split(' ')[1][0] : '') : ''}`,
+        children: `${name?.split(' ')[0]?.[0]}${name.split(' ')[1] ? (name?.split(' ')[1]?.[0] ? name?.split(' ')[1]?.[0] : '') : ''}`.toUpperCase(),
     };
   }
   return (
     <Box sx={{height:"100vh", position:"relative"}}>
       <Stack direction={"row"} spacing={2} sx={{bgcolor:"greenyellow",p:"1.5rem",mb:"1.5rem"}}>
-        <Avatar {...stringAvatar("Kent Dodds")} />
-        <Typography sx={{ textAlign: "center", fontWeight:"semi-bold", fontSize:"1.5rem" }}>anonymous</Typography>
+        <Avatar {...stringAvatar(user?.name||"Anonymous User")} />
+        <Typography sx={{ textAlign: "center", fontWeight:"semi-bold", fontSize:"1.5rem" }}>{user?.name}</Typography>
       </Stack>
       <Stack sx={{px:".5rem"}}>
         <Card sx={{width:"75%",mb:"2rem",bgcolor:"red"}}>
