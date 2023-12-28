@@ -10,7 +10,7 @@ export const registerUser = async(url:string,body:registerInfoState)=>{
     };
     const response = await axios.post(url,JSON.stringify(body),headers);
     const data = await response.data;
-    if (!response) {
+    if (response.status === 400||response.status === 500) {
         let message
         if (data?.message) {
             message = data.message;

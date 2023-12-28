@@ -59,9 +59,9 @@ function Register() {
         <Button variant="contained" fullWidth sx={{my:"1rem"}} type="submit">Sign Up</Button>
         <Button variant="outlined" fullWidth startIcon={<GoogleIcon/>} href="#">  Sign Up with Google</Button>
         <Button variant="outlined" fullWidth startIcon={<Facebook/> } sx={{my:"1rem"}} href="#">Sign Up with Facebook </Button>
-        <Link sx={{pl:"3rem"}}>Already have an account? Login here</Link>
+        {postState?.error?.error&&<Typography>{postState?.error?.error&&postState.error.message}</Typography>}
+        <Link href="/login" sx={{pl:"3rem"}}>Already have an account? Login here</Link>
         </form>
-        <Typography>{postState?.error?.error&&postState.error.message}</Typography>
 
       </Paper>
     </Stack>

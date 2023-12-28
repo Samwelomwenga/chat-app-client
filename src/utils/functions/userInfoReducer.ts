@@ -1,9 +1,9 @@
-import { registerInfoState } from "../../context/AuthContext";
+import { LoginInfoState, RegisterInfoState } from "../../context/AuthContext";
  export type Action = {
     type: string;
     payload: string;
     };
-export const registerUserReducer = (state: registerInfoState, action:Action) => {  
+export const registerUserReducer = (state: RegisterInfoState, action:Action) => {  
     switch (action.type) {
         case "SET_NAME":
         return {
@@ -24,3 +24,20 @@ export const registerUserReducer = (state: registerInfoState, action:Action) => 
         return state;
     }
     }
+
+    export const loginUserReducer = (state: LoginInfoState, action:Action) => {  
+        switch (action.type) {
+            case "SET_EMAIL":{ 
+                return {
+                ...state,
+                email: action.payload,
+            };}
+            case "SET_PASSWORD":
+            {return {
+                ...state,
+                password: action.payload,
+            };}
+            default:
+            return state;
+        }
+        }

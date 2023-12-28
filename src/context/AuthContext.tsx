@@ -1,15 +1,16 @@
 import { createContext,ReactNode,useEffect,useReducer} from "react";
-import {registerUserReducer} from "../utils/functions/userInfoReducer"
+import {loginUserReducer, registerUserReducer} from "../utils/functions/userInfoReducer"
 import { Action } from "../utils/functions/userInfoReducer";
 import postUserInfoReducer, { PostUserInfoAction } from "../utils/functions/postUserInfoReducer";
 type AuthContextProps={
     children:ReactNode;
 }
-export type registerInfoState={
+export type RegisterInfoState={
     name:string;
     email:string;
     password:string;
 }
+export type LoginInfoState=Omit<RegisterInfoState,"name">
 export type PostUserInfoState={
     user:{
         id:string;
@@ -27,21 +28,24 @@ export type PostUserInfoState={
 export type UserPayload=Pick<PostUserInfoState["user"],"id"|"email"|"name"|"token">
 
 type AuthState={
-    userInfo:registerInfoState|null;
+    userInfo:RegisterInfoState|null;
     userInfoDispatch:React.Dispatch<Action>;
     postState:PostUserInfoState;
     postDispatch:React.Dispatch<PostUserInfoAction>;
+    loginInfo:LoginInfoState;
+    loginInfoDispatch:React.Dispatch<Action>;
     logoutUser:()=>void;
 }
 
 export const AuthContext=createContext<AuthState|null>(null);
 export const AuthProvider=({children}:AuthContextProps)=>{
-    const registerInfoInitialState:registerInfoState={
+    const registerInfoInitialState:RegisterInfoState={
         name:"",
         email:"",
         password:"",
     }
     const [ userInfo,userInfoDispatch]=useReducer(registerUserReducer, registerInfoInitialState);
+
     const postUserInfoInitialState:PostUserInfoState={
         user:{
             id:"",
@@ -53,6 +57,12 @@ export const AuthProvider=({children}:AuthContextProps)=>{
         loading:false,
     }
     const [postState,postDispatch]=useReducer(postUserInfoReducer,postUserInfoInitialState);
+
+    const loginInfoInitialState:LoginInfoState={
+        email:"",
+        password:"",
+    }
+    const [loginInfo,loginInfoDispatch]=useReducer(loginUserReducer,loginInfoInitialState);
 
     useEffect(()=>{
         const user=localStorage.getItem("user");
@@ -70,5 +80,5 @@ export const AuthProvider=({children}:AuthContextProps)=>{
       }
   
 
-    return <AuthContext.Provider value={{userInfo,userInfoDispatch,postState,postDispatch,logoutUser}}>{children}</AuthContext.Provider>
+    return <AuthContext.Provider value={{userInfo,userInfoDispatch,postState,postDispatch,loginInfo,loginInfoDispatch,logoutUser}}>{children}</AuthContext.Provider>
 }
