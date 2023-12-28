@@ -2,7 +2,7 @@ import React, { useContext} from "react";
 import { Button, TextField, Typography, Paper, FormLabel, Link, Stack } from "@mui/material";
 import {Google as GoogleIcon,Facebook} from '@mui/icons-material';
 import { AuthContext } from "../context/AuthContext";
-import { baseUrl, registerUser } from "../utils/services";
+import { baseUrl, postRequest } from "../utils/services";
 
 
 function Register() {
@@ -19,7 +19,7 @@ function Register() {
       e.preventDefault();
       postDispatch?.({type: "POST_USER_INFO_REQUEST"});
       if (userInfo) {
-        const res= await registerUser(`${baseUrl}/users/register`,userInfo)
+        const res= await postRequest(`${baseUrl}/users/register`,userInfo)
         if (res.error) {
           postDispatch?.({type: "POST_USER_INFO_FAIL", payload: res.error});
         }
