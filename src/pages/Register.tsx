@@ -1,10 +1,9 @@
-import React, { useContext,useEffect,useState } from "react";
+import React, { useContext} from "react";
 import { Button, TextField, Typography, Paper, FormLabel, Link, Stack } from "@mui/material";
 import {Google as GoogleIcon,Facebook} from '@mui/icons-material';
 import { AuthContext } from "../context/AuthContext";
 import { baseUrl, registerUser } from "../utils/services";
 
-type ResponseType = { message: string } | { token: string, id: string, name: string, email: string };
 
 function Register() {
 
@@ -13,33 +12,23 @@ function Register() {
    const userInfoDispatch=context?.userInfoDispatch;
    const postState=context?.postState;
    const postDispatch=context?.postDispatch;
-    console.log("POSTSTATEUSER", postState?.user)
-    const [response, setResponse] = useState<ResponseType|null>(null)
-    response&&console.log("response",response)
 
 
 
     const handleRegisterUser=async (e:React.FormEvent<HTMLFormElement>)=>{
       e.preventDefault();
-      console.log("clicked")
       postDispatch?.({type: "POST_USER_INFO_REQUEST"});
       if (userInfo) {
         const res= await registerUser(`${baseUrl}/users/register`,userInfo)
         if (res.error) {
-          setResponse(res);
           postDispatch?.({type: "POST_USER_INFO_FAIL", payload: res.error});
         }
-        localStorage.setItem("user",JSON.stringify(res))
         postDispatch?.({type: "POST_USER_INFO_SUCCESS", payload: res});
+        localStorage.setItem("user",JSON.stringify(res))
 
       }
     }
 
-    useEffect(()=>{
-      const user=localStorage.getItem("user");
-       user&&postDispatch?.({type:"POST_USER_INFO_SUCCESS",payload:JSON.parse(user)})
-
-    },[postDispatch])
 
 
   return (
@@ -72,7 +61,7 @@ function Register() {
         <Button variant="outlined" fullWidth startIcon={<Facebook/> } sx={{my:"1rem"}} href="#">Sign Up with Facebook </Button>
         <Link sx={{pl:"3rem"}}>Already have an account? Login here</Link>
         </form>
-        <Typography>{ response&& "message" in response? response?.message:''}</Typography>
+        <Typography>{postState?.error?.error&&postState.error.message}</Typography>
 
       </Paper>
     </Stack>

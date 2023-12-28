@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { UserInfoState } from '../context/AuthContext';
+import { registerInfoState } from '../context/AuthContext';
 export const baseUrl = 'http://localhost:3000/api';
 
-export const registerUser = async(url:string,body:UserInfoState)=>{
+export const registerUser = async(url:string,body:registerInfoState)=>{
     const headers = {
         headers: {
             'Content-Type': 'application/json',

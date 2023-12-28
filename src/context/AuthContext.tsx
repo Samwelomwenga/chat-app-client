@@ -1,11 +1,11 @@
 import { createContext,ReactNode,useEffect,useReducer} from "react";
-import userInfoReducer from "../utils/functions/userInfoReducer"
+import {registerUserReducer} from "../utils/functions/userInfoReducer"
 import { Action } from "../utils/functions/userInfoReducer";
 import postUserInfoReducer, { PostUserInfoAction } from "../utils/functions/postUserInfoReducer";
 type AuthContextProps={
     children:ReactNode;
 }
-export type UserInfoState={
+export type registerInfoState={
     name:string;
     email:string;
     password:string;
@@ -18,13 +18,16 @@ export type PostUserInfoState={
         token:string;
 
     };
-    error:string|null;
+    error:{
+        error:boolean;
+        message:string;
+    }|null;
     loading:boolean;
 }
 export type UserPayload=Pick<PostUserInfoState["user"],"id"|"email"|"name"|"token">
 
 type AuthState={
-    userInfo:UserInfoState|null;
+    userInfo:registerInfoState|null;
     userInfoDispatch:React.Dispatch<Action>;
     postState:PostUserInfoState;
     postDispatch:React.Dispatch<PostUserInfoAction>;
@@ -33,12 +36,12 @@ type AuthState={
 
 export const AuthContext=createContext<AuthState|null>(null);
 export const AuthProvider=({children}:AuthContextProps)=>{
-    const userInfoInitialState:UserInfoState={
+    const registerInfoInitialState:registerInfoState={
         name:"",
         email:"",
         password:"",
     }
-    const [ userInfo,userInfoDispatch]=useReducer(userInfoReducer, userInfoInitialState);
+    const [ userInfo,userInfoDispatch]=useReducer(registerUserReducer, registerInfoInitialState);
     const postUserInfoInitialState:PostUserInfoState={
         user:{
             id:"",

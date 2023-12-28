@@ -4,12 +4,10 @@ export type PostUserInfoAction =
   | { type: "POST_USER_INFO_REQUEST" }
   | {
       type: "POST_USER_INFO_SUCCESS";
-      payload:UserPayload;
+      payload: UserPayload;
     }
-  |{type:"POST_USER_INFO_FAIL";
-  payload:string;
-}
-|{type:"POST_USER_INFO_RESET"; payload:UserPayload;};
+  | { type: "POST_USER_INFO_FAIL"; payload: { message: string; error: boolean; } }
+  | { type: "POST_USER_INFO_RESET"; payload: UserPayload; };
 
 const postUserInfoReducer = (
   state: PostUserInfoState,

@@ -1,9 +1,9 @@
-import { UserInfoState } from "../../context/AuthContext";
+import { registerInfoState } from "../../context/AuthContext";
  export type Action = {
     type: string;
     payload: string;
     };
-const userInfoReducer = (state: UserInfoState, action:Action) => {  
+export const registerUserReducer = (state: registerInfoState, action:Action) => {  
     switch (action.type) {
         case "SET_NAME":
         return {
@@ -24,4 +24,3 @@ const userInfoReducer = (state: UserInfoState, action:Action) => {
         return state;
     }
     }
-    export default userInfoReducer;
