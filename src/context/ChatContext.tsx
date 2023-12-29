@@ -1,6 +1,6 @@
 import { createContext,ReactNode } from "react";
 import { UserPayload as User } from "./AuthContext";
-import useFetch, { fetchChatsInitialState, FetchChatsInitialState } from "../utils/hooks/useFetch";
+import useFetch, { fetchChatsInitialState, FetchChatsInitialState } from "../hooks/useFetch";
 
 type ChatContextProps = {
     children: ReactNode;

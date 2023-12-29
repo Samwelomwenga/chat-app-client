@@ -1,4 +1,4 @@
-import { FetchChatsInitialState } from "../hooks/useFetch";
+import { FetchChatsInitialState } from "../../hooks/useFetch";
 
  export type FetchChatsAction =
 |{

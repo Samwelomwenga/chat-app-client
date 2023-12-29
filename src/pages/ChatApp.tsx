@@ -13,11 +13,14 @@ import {
 import { SendRounded, BorderColorRounded } from "@mui/icons-material";
 import { AuthContext } from "../context/AuthContext";
 import stringAvatar from "../utils/functions/stringAvatar";
+import { ChatContext } from "../context/ChatContext";
 
 function ChatApp() {
   const context = useContext(AuthContext);
   const user = context?.postState.user;
   const logoutUser = context?.logoutUser;
+  const fetchChatsState = useContext(ChatContext);
+  console.log(fetchChatsState);
 
   return (
     <Box sx={{ height: "100vh", position: "relative" }}>
