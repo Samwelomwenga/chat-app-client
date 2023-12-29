@@ -23,14 +23,10 @@ export const postRequest = async(url:string,body:RegisterInfoState|LoginInfoStat
     return data;
 }
 export const getRequest = async(url:string)=>{
-    const headers = {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    };
-    const response = await axios.get(url,headers);
+   
+    const response = await axios.get(url);
     const data = await response.data;
-    if (response.status === 400||response.status === 500) {
+    if (response.status=== 400||response.status === 500) {
         let message
         if (data?.message) {
             message = data.message;
