@@ -12,71 +12,80 @@ import {
 } from "@mui/material";
 import { SendRounded, BorderColorRounded } from "@mui/icons-material";
 import { AuthContext } from "../context/AuthContext";
+import stringAvatar from "../utils/functions/stringAvatar";
 
 function ChatApp() {
+  const context = useContext(AuthContext);
+  const user = context?.postState.user;
+  const logoutUser = context?.logoutUser;
 
-  const context= useContext(AuthContext)
-  const user= context?.postState.user;
-  const logoutUser=context?.logoutUser;
-
-
-  function stringToColor(string: string) {
-    let hash = 0;
-    let i;
-
-    /* eslint-disable no-bitwise */
-    for (i = 0; i < string.length; i += 1) {
-      hash = string.charCodeAt(i) + ((hash << 5) - hash);
-    }
-
-    let color = "#";
-
-    for (i = 0; i < 3; i += 1) {
-      const value = (hash >> (i * 8)) & 0xff;
-      color += `00${value.toString(16)}`.slice(-2);
-    }
-    /* eslint-enable no-bitwise */
-
-    return color;
-  }
-
-  function stringAvatar(name: string) {
-    return {
-      sx: {
-        bgcolor: stringToColor(name),
-      },
-        children: `${name?.split(' ')[0]?.[0]}${name.split(' ')[1] ? (name?.split(' ')[1]?.[0] ? name?.split(' ')[1]?.[0] : '') : ''}`.toUpperCase(),
-    };
-  }
   return (
-    <Box sx={{height:"100vh", position:"relative"}}>
-      <Box  sx={{bgcolor:"greenyellow",p:"1.5rem",mb:"1.5rem",width:"100%", display:"flex",gap:"5rem"}}>
-        <Box sx={{display:"flex",gap:2}}>
-        <Avatar {...stringAvatar(user?.name||"Anonymous User")} />
-        <Typography sx={{ textAlign: "center", fontWeight:"semi-bold", fontSize:"1.5rem" }}>{user?.name}</Typography>
+    <Box sx={{ height: "100vh", position: "relative" }}>
+      <Box
+        sx={{
+          bgcolor: "greenyellow",
+          p: "1.5rem",
+          mb: "1.5rem",
+          width: "100%",
+          display: "flex",
+          gap: "5rem",
+        }}
+      >
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Avatar {...stringAvatar(user?.name || "Anonymous User")} />
+          <Typography
+            sx={{
+              textAlign: "center",
+              fontWeight: "semi-bold",
+              fontSize: "1.5rem",
+            }}
+          >
+            {user?.name}
+          </Typography>
         </Box>
-        <Button  onClick={()=>logoutUser&&logoutUser()} variant="contained" sx={{mr:"auto"}}>Logout</Button>
+        <Button
+          onClick={() => logoutUser && logoutUser()}
+          variant="contained"
+          sx={{ mr: "auto" }}
+        >
+          Logout
+        </Button>
       </Box>
-      <Stack sx={{px:".5rem"}}>
-        <Card sx={{width:"75%",mb:"2rem",bgcolor:"red"}}>
-            <CardContent>
-                <Typography>Lorem ipsum dolor, sit amet consectng elit. Voluptas tenetur repellenduBeatae?</Typography>
-            </CardContent>
+      <Stack sx={{ px: ".5rem" }}>
+        <Card sx={{ width: "75%", mb: "2rem", bgcolor: "red" }}>
+          <CardContent>
+            <Typography>
+              Lorem ipsum dolor, sit amet consectng elit. Voluptas tenetur
+              repellenduBeatae?
+            </Typography>
+          </CardContent>
         </Card>
-        <Card sx={{width:"75%"}}>
-            <CardContent>
-                <Typography>Lorem ipsum dolor, sit amet consectng elit. Voluptas tenetur repellenduBeatae?</Typography>
-            </CardContent>
+        <Card sx={{ width: "75%" }}>
+          <CardContent>
+            <Typography>
+              Lorem ipsum dolor, sit amet consectng elit. Voluptas tenetur
+              repellenduBeatae?
+            </Typography>
+          </CardContent>
         </Card>
       </Stack>
-      <Stack direction={"row"} spacing={1} sx={{width:"100%",display:"flex", justifyContent:"center", mt:"1.5rem"}}>
+      <Stack
+        direction={"row"}
+        spacing={1}
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          mt: "1.5rem",
+        }}
+      >
         <BorderColorRounded />
         <Typography sx={{ fontStyle: "italic" }}>Killer is typing</Typography>
       </Stack>
 
       <TextField
-      sx={{position:"absolute",bottom:".4rem"}}
-      placeholder="Type Message..."
+        sx={{ position: "absolute", bottom: ".4rem" }}
+        placeholder="Type Message..."
         fullWidth
         InputProps={{
           endAdornment: (
