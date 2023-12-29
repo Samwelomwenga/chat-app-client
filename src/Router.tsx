@@ -6,9 +6,12 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { AuthContext } from "./context/AuthContext";
 import { CssBaseline } from "@mui/material";
+import { ChatContextProvider } from "./context/ChatContext";
 
 const Router=()=>{
-  const user = useContext(AuthContext)?.postState.user;
+    const defaultUser = { id: '', name: '', email: '', token: '' }; 
+
+  const user = useContext(AuthContext)?.postState.user || defaultUser;
 
     const BrowserRouter=createBrowserRouter(
         [
@@ -20,7 +23,10 @@ const Router=()=>{
         
     );
     return <>
+    <ChatContextProvider user={user&&user}>
     <CssBaseline/>
-    <RouterProvider router={BrowserRouter}/></>;
+    <RouterProvider router={BrowserRouter}/>
+    </ChatContextProvider>
+    </>;
 }
 export default Router;
