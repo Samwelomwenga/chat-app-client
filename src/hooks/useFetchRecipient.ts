@@ -10,12 +10,15 @@ type Chat = {
 };
 
 export type RecipientDetails = {
-  _id: string;
-  username: string;
-  email: string;
-  password: string;
-  createdAt: string;
-  updatedAt: string;
+  user:{
+
+    _id: string;
+    name: string;
+    email: string;
+    password: string;
+    createdAt: string;
+    updatedAt: string;
+  }
 };
 export type RecipientInitialState = {
   recipient: RecipientDetails| null;

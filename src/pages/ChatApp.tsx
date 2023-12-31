@@ -14,13 +14,34 @@ import { SendRounded, BorderColorRounded } from "@mui/icons-material";
 import { AuthContext } from "../context/AuthContext";
 import stringAvatar from "../utils/functions/stringAvatar";
 import { ChatContext } from "../context/ChatContext";
+import useFetchRecipient from "../hooks/useFetchRecipient";
+type Chat={
+  _id:string;
+  members:string[];
+  createdAt:string;
+  updatedAt:string;
+
+}
+type Chats=Chat[];
+
+ export type UserChats={
+  chats:Chats;
+}
 
 function ChatApp() {
   const context = useContext(AuthContext);
-  const user = context?.postState.user;
+  const user = context?.postState.user || { id: '', name: '', email: '', token: '' };
   const logoutUser = context?.logoutUser;
   const fetchChatsState = useContext(ChatContext);
-  console.log(fetchChatsState);
+  const userChats=fetchChatsState.userChats;
+  // console.log(Array.isArray(userChats.chats))
+  // if (Array.isArray(userChats.chats)) {
+  //   userChats.chats.map((chat) => console.log("chat", chat));
+  // }
+  // console.log("userChats",fetchChatsState.userChats);
+  const chat = userChats?.chats[0] || { _id: '', members: [], createdAt: '', updatedAt: '' };
+  const recipient=useFetchRecipient(chat,user)
+  console.log("Recipient",recipient.recipient?.user.name)
 
   return (
     <Box sx={{ height: "100vh", position: "relative" }}>
