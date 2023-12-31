@@ -1,4 +1,5 @@
 import { FetchChatsInitialState } from "../../hooks/useFetch";
+import { UserChats } from "../../pages/ChatApp";
 
  export type FetchChatsAction =
 |{
@@ -6,7 +7,7 @@ import { FetchChatsInitialState } from "../../hooks/useFetch";
 }
 |{
     type:"FETCH_CHATS_SUCCESS"
-    payload:string[]
+    payload:UserChats
 }
 |{
     type:"FETCH_CHATS_FAIL"

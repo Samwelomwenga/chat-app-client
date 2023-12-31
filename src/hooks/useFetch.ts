@@ -2,17 +2,18 @@ import { useEffect, useReducer } from "react";
 import fetchChatsReducer from "../utils/functions/fetchChatsReducer";
 import { baseUrl, getRequest } from "../utils/services";
 import { UserPayload as User} from "../context/AuthContext";
+import { UserChats } from "../pages/ChatApp";
 
 export type FetchChatsInitialState = {
   loading: boolean;
   error: { message: string; isError: boolean } | null;
-  userChats: string[];
+  userChats: UserChats;
 };
 
 export const fetchChatsInitialState: FetchChatsInitialState = {
   loading: true,
   error: null,
-  userChats: [],
+  userChats:{chats:[]},
 };
 const useFetch = (user:User) => {
   const [fetchChatsState, dispatchFetchChats] = useReducer(
