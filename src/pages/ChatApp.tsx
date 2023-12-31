@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import {
   Avatar,
+  AvatarGroup,
   Box,
   Button,
   Card,
@@ -14,34 +15,37 @@ import { SendRounded, BorderColorRounded } from "@mui/icons-material";
 import { AuthContext } from "../context/AuthContext";
 import stringAvatar from "../utils/functions/stringAvatar";
 import { ChatContext } from "../context/ChatContext";
-import useFetchRecipient from "../hooks/useFetchRecipient";
-type Chat={
-  _id:string;
-  members:string[];
-  createdAt:string;
-  updatedAt:string;
+import UserChat from "../components/UserChat";
 
-}
-type Chats=Chat[];
+export type Chat = {
+  _id: string;
+  members: string[];
+  createdAt: string;
+  updatedAt: string;
+};
+type Chats = Chat[];
 
- export type UserChats={
-  chats:Chats;
-}
+export type UserChats = {
+  chats: Chats;
+};
 
 function ChatApp() {
   const context = useContext(AuthContext);
-  const user = context?.postState.user || { id: '', name: '', email: '', token: '' };
+  const user = context?.postState.user || {
+    id: "",
+    name: "",
+    email: "",
+    token: "",
+  };
   const logoutUser = context?.logoutUser;
   const fetchChatsState = useContext(ChatContext);
-  const userChats=fetchChatsState.userChats;
+  const userChats = fetchChatsState.userChats;
   // console.log(Array.isArray(userChats.chats))
   // if (Array.isArray(userChats.chats)) {
   //   userChats.chats.map((chat) => console.log("chat", chat));
   // }
   // console.log("userChats",fetchChatsState.userChats);
-  const chat = userChats?.chats[0] || { _id: '', members: [], createdAt: '', updatedAt: '' };
-  const recipient=useFetchRecipient(chat,user)
-  console.log("Recipient",recipient.recipient?.user.name)
+  // const chat = userChats?.chats[0] || { _id: '', members: [], createdAt: '', updatedAt: '' };
 
   return (
     <Box sx={{ height: "100vh", position: "relative" }}>
@@ -76,6 +80,11 @@ function ChatApp() {
         </Button>
       </Box>
       <Stack sx={{ px: ".5rem" }}>
+        <AvatarGroup>
+          {userChats.chats.map((chat) => (
+            <UserChat chat={chat} user={user} />
+          ))}
+        </AvatarGroup>
         <Card sx={{ width: "75%", mb: "2rem", bgcolor: "red" }}>
           <CardContent>
             <Typography>
