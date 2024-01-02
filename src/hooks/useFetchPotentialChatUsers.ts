@@ -9,7 +9,7 @@ import potentialChatUsersReducer from "../utils/functions/potentialChatUsersRedu
 export type PotentialChatUsersInitialState = {
   loading: boolean;
   error: null | { message: string; isError: boolean };
-  potentialChatUsers: Users;
+  potentialChatUsers: PotentialUser[];
 };
 
 export const potentialChatUsersInitialState: PotentialChatUsersInitialState = {
@@ -18,14 +18,18 @@ export const potentialChatUsersInitialState: PotentialChatUsersInitialState = {
   potentialChatUsers: [],
 };
 
+export type PotentialUser = {
+  _id: string;
+  name: string;
+  email: string;
+  password: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type Users = {
-    _id: string;
-    name: string;
-    email: string;
-    password: string;
-    createdAt: string;
-    updatedAt: string;
-  }[];
+  users: PotentialUser[];
+};
 const useFetchPotentialChatUsers = (userChats: UserChats, user: User) => {
   const [potentialChatUsersState, dispatchPotentialChatUsers] = useReducer(
     potentialChatUsersReducer,
@@ -38,7 +42,7 @@ const useFetchPotentialChatUsers = (userChats: UserChats, user: User) => {
       try {
         const users: Users = await getRequest(`${baseUrl}/users`);
 
-        const potentialChatUsers = users.filter((u) => {
+        const potentialChatUsers = users.users.filter((u) => {
           let isChatCreated = false;
 
           if (user.id === u._id) return false;

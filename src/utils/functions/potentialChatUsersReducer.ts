@@ -1,6 +1,6 @@
-import { PotentialChatUsersInitialState } from "../../hooks/useFetchPotentialChatUsers"
+import { PotentialChatUsersInitialState, PotentialUser } from "../../hooks/useFetchPotentialChatUsers"
 // import { RecipientDetails as Users } from "../../hooks/useFetchRecipient"
-import { Users } from "../../hooks/useFetchPotentialChatUsers"
+// import { Users } from "../../hooks/useFetchPotentialChatUsers"
 
 export type PotentialChatUsersAction =
 |{
@@ -8,7 +8,7 @@ export type PotentialChatUsersAction =
 }
 |{
    type:"FETCH_CHATS_SUCCESS"
-   payload:Users
+   payload:PotentialUser[]
 }
 |{
    type:"FETCH_CHATS_FAIL"
