@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext} from "react";
 import {
   Avatar,
   AvatarGroup,
@@ -7,15 +7,20 @@ import {
   Card,
   CardContent,
   InputAdornment,
+  SpeedDial,
+  SpeedDialAction,
+  SpeedDialIcon,
   Stack,
   TextField,
   Typography,
+  
 } from "@mui/material";
-import { SendRounded, BorderColorRounded } from "@mui/icons-material";
+import { SendRounded, BorderColorRounded} from "@mui/icons-material";
 import { AuthContext } from "../context/AuthContext";
 import stringAvatar from "../utils/functions/stringAvatar";
 import { ChatContext } from "../context/ChatContext";
-import UserChat from "../components/UserChat";
+import UserChat, { StyledBadge } from "../components/UserChat";
+
 
 export type Chat = {
   _id: string;
@@ -38,9 +43,11 @@ function ChatApp() {
     token: "",
   };
   const logoutUser = context?.logoutUser;
-  const fetchChatsState = useContext(ChatContext);
-  const userChats = fetchChatsState.userChats;
-  // console.log(Array.isArray(userChats.chats))
+  const chatContext = useContext(ChatContext);
+  const userChats = chatContext.fetchChatsState.userChats;
+  const pcs=chatContext.potentialChatUsersState.potentialChatUsers;
+  console.log("pcs",pcs); 
+ 
   // if (Array.isArray(userChats.chats)) {
   //   userChats.chats.map((chat) => console.log("chat", chat));
   // }
@@ -81,10 +88,13 @@ function ChatApp() {
       </Box>
       <Stack sx={{ px: ".5rem" }}>
         <AvatarGroup>
-          {userChats.chats.map((chat) => (
-            <UserChat chat={chat} user={user} />
+          {userChats.chats.map((chat,index) => (
+            <UserChat key={index}  chat={chat} user={user} />
           ))}
         </AvatarGroup>
+        {/* {pcs.map((pc,index) => (
+          <PotentialUser key={index} potentialUser={pc} />
+        ))} */}
         <Card sx={{ width: "75%", mb: "2rem", bgcolor: "red" }}>
           <CardContent>
             <Typography>
@@ -115,6 +125,34 @@ function ChatApp() {
         <BorderColorRounded />
         <Typography sx={{ fontStyle: "italic" }}>Killer is typing</Typography>
       </Stack>
+      <SpeedDial
+        ariaLabel="potential chat users speed dial"
+        sx={{ position: 'absolute', bottom: 66, right: 10,"& .MuiSpeedDial-actions":{
+          transform: 'translateX(-10rem)',
+        } }}
+        icon={<SpeedDialIcon />}
+      >
+        {pcs.map((pc,index) => (
+          <SpeedDialAction
+          sx={{"& .MuiSpeedDialAction-staticTooltipLabel":{
+            textWrap:"nowrap",
+            width:"150px",
+            backgroundColor:"grey",
+            color:"white"
+          
+          }}}
+            key={index}
+            icon={ <StyledBadge>
+              <Avatar
+                {...stringAvatar(pc.name || "Anonyms")}
+              />
+              </StyledBadge>}
+            tooltipTitle={pc.name}
+            tooltipOpen={true}
+            tooltipPlacement="right"
+          />
+        ))}
+      </SpeedDial>
 
       <TextField
         sx={{ position: "absolute", bottom: ".4rem" }}
