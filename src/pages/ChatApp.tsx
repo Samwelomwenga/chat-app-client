@@ -7,9 +7,6 @@ import {
   Card,
   CardContent,
   InputAdornment,
-  SpeedDial,
-  SpeedDialAction,
-  SpeedDialIcon,
   Stack,
   TextField,
   Typography,
@@ -19,7 +16,8 @@ import { SendRounded, BorderColorRounded} from "@mui/icons-material";
 import { AuthContext } from "../context/AuthContext";
 import stringAvatar from "../utils/functions/stringAvatar";
 import { ChatContext } from "../context/ChatContext";
-import UserChat, { StyledBadge } from "../components/UserChat";
+import UserChat from "../components/UserChat";
+import PotentialChats from "../components/PotentialChats";
 
 
 export type Chat = {
@@ -45,8 +43,6 @@ function ChatApp() {
   const logoutUser = context?.logoutUser;
   const chatContext = useContext(ChatContext);
   const userChats = chatContext.fetchChatsState.userChats;
-  const pcs=chatContext.potentialChatUsersState.potentialChatUsers;
-  console.log("pcs",pcs); 
  
   // if (Array.isArray(userChats.chats)) {
   //   userChats.chats.map((chat) => console.log("chat", chat));
@@ -125,7 +121,8 @@ function ChatApp() {
         <BorderColorRounded />
         <Typography sx={{ fontStyle: "italic" }}>Killer is typing</Typography>
       </Stack>
-      <SpeedDial
+      <PotentialChats/>
+      {/* <SpeedDial
         ariaLabel="potential chat users speed dial"
         sx={{ position: 'absolute', bottom: 66, right: 10,"& .MuiSpeedDial-actions":{
           transform: 'translateX(-10rem)',
@@ -152,7 +149,7 @@ function ChatApp() {
             tooltipPlacement="right"
           />
         ))}
-      </SpeedDial>
+      </SpeedDial> */}
 
       <TextField
         sx={{ position: "absolute", bottom: ".4rem" }}
