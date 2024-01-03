@@ -1,4 +1,4 @@
-import { useContext} from "react";
+import { useContext } from "react";
 import {
   Avatar,
   AvatarGroup,
@@ -10,15 +10,13 @@ import {
   Stack,
   TextField,
   Typography,
-  
 } from "@mui/material";
-import { SendRounded, BorderColorRounded} from "@mui/icons-material";
+import { SendRounded, BorderColorRounded } from "@mui/icons-material";
 import { AuthContext } from "../context/AuthContext";
 import stringAvatar from "../utils/functions/stringAvatar";
 import { ChatContext } from "../context/ChatContext";
 import UserChat from "../components/UserChat";
 import PotentialChats from "../components/PotentialChats";
-
 
 export type Chat = {
   _id: string;
@@ -33,22 +31,16 @@ export type UserChats = {
 };
 
 function ChatApp() {
-  const context = useContext(AuthContext);
-  const user = context?.postState.user || {
+  const authContext = useContext(AuthContext);
+  const user = authContext?.postState.user || {
     id: "",
     name: "",
     email: "",
     token: "",
   };
-  const logoutUser = context?.logoutUser;
+  const logoutUser = authContext?.logoutUser;
   const chatContext = useContext(ChatContext);
   const userChats = chatContext.fetchChatsState.userChats;
- 
-  // if (Array.isArray(userChats.chats)) {
-  //   userChats.chats.map((chat) => console.log("chat", chat));
-  // }
-  // console.log("userChats",fetchChatsState.userChats);
-  // const chat = userChats?.chats[0] || { _id: '', members: [], createdAt: '', updatedAt: '' };
 
   return (
     <Box sx={{ height: "100vh", position: "relative" }}>
@@ -84,13 +76,11 @@ function ChatApp() {
       </Box>
       <Stack sx={{ px: ".5rem" }}>
         <AvatarGroup>
-          {userChats.chats.map((chat,index) => (
-            <UserChat key={index}  chat={chat} user={user} />
+          {userChats.chats.map((chat, index) => (
+            <UserChat key={index} chat={chat} user={user} />
           ))}
         </AvatarGroup>
-        {/* {pcs.map((pc,index) => (
-          <PotentialUser key={index} potentialUser={pc} />
-        ))} */}
+
         <Card sx={{ width: "75%", mb: "2rem", bgcolor: "red" }}>
           <CardContent>
             <Typography>
@@ -121,35 +111,7 @@ function ChatApp() {
         <BorderColorRounded />
         <Typography sx={{ fontStyle: "italic" }}>Killer is typing</Typography>
       </Stack>
-      <PotentialChats/>
-      {/* <SpeedDial
-        ariaLabel="potential chat users speed dial"
-        sx={{ position: 'absolute', bottom: 66, right: 10,"& .MuiSpeedDial-actions":{
-          transform: 'translateX(-10rem)',
-        } }}
-        icon={<SpeedDialIcon />}
-      >
-        {pcs.map((pc,index) => (
-          <SpeedDialAction
-          sx={{"& .MuiSpeedDialAction-staticTooltipLabel":{
-            textWrap:"nowrap",
-            width:"150px",
-            backgroundColor:"grey",
-            color:"white"
-          
-          }}}
-            key={index}
-            icon={ <StyledBadge>
-              <Avatar
-                {...stringAvatar(pc.name || "Anonyms")}
-              />
-              </StyledBadge>}
-            tooltipTitle={pc.name}
-            tooltipOpen={true}
-            tooltipPlacement="right"
-          />
-        ))}
-      </SpeedDial> */}
+      <PotentialChats />
 
       <TextField
         sx={{ position: "absolute", bottom: ".4rem" }}
