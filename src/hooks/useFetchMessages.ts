@@ -13,13 +13,13 @@ export type Message = {
 };
 
 export type MessageInitialState = {
-  messages:Message [];
+  messages:{messages:Message []};
   loading: boolean;
   error: { message: string; isError: boolean };
 };
 const useFetchMessages = (currentChat: Chat) => {
   const messagesInitialState: MessageInitialState = {
-    messages: [],
+    messages: {messages:[]},
     loading: false,
     error: { message: "", isError: false },
   };
@@ -29,14 +29,14 @@ const useFetchMessages = (currentChat: Chat) => {
     messagesInitialState
   );
   useEffect(() => {
+    if (!currentChat._id) return;
     let ignore = false;
     const getMessages = async () => {
       dispatchMessages({ type: "FETCH_MESSAGE_REQUEST" });
       try {
         const messages = await getRequest(
-          `${baseUrl}/messages/${currentChat._id}`
+          `${baseUrl}/messages/${currentChat._id}h`
         );
-        console.log("messages", messages)
         if (!ignore) {
           dispatchMessages({
             type: "FETCH_MESSAGE_SUCCESS",

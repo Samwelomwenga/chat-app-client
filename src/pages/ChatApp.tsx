@@ -41,6 +41,8 @@ function ChatApp() {
   const logoutUser = authContext?.logoutUser;
   const chatContext = useContext(ChatContext);
   const userChats = chatContext.fetchChatsState.userChats;
+  const updateCurrentChat = chatContext.updateCurrentChat;
+  const messages=chatContext.messagesState.messages;
 
   return (
     <Box sx={{ height: "100vh", position: "relative" }}>
@@ -77,18 +79,21 @@ function ChatApp() {
       <Stack sx={{ px: ".5rem" }}>
         <AvatarGroup>
           {userChats.chats.map((chat, index) => (
-            <UserChat key={index} chat={chat} user={user} />
+            
+            <Box key={index} sx={{"& :hover":{ cursor:"pointer"}}} onClick={()=>updateCurrentChat(chat)}>
+            <UserChat  chat={chat} user={user}/>
+            </Box>
           ))}
         </AvatarGroup>
-
-        <Card sx={{ width: "75%", mb: "2rem", bgcolor: "red" }}>
+        {messages.messages.map((message,index)=>(<Card key={index} sx={{ width: "75%", mb: "2rem", bgcolor: "red" }}>
           <CardContent>
             <Typography>
-              Lorem ipsum dolor, sit amet consectng elit. Voluptas tenetur
-              repellenduBeatae?
+             {message.text}
             </Typography>
           </CardContent>
-        </Card>
+        </Card>))}
+
+        
         <Card sx={{ width: "75%" }}>
           <CardContent>
             <Typography>

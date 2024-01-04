@@ -5,7 +5,7 @@ type FetchMessageActions={
 }
 |{
     type:"FETCH_MESSAGE_SUCCESS"
-    payload:Message[]
+    payload:{messages:Message[]}
 }
 |{
     type:"FETCH_MESSAGE_FAIL"
@@ -26,7 +26,7 @@ const fetchMessageReducer=(state:MessageInitialState,action:FetchMessageActions)
                 ...state,
                 loading:false,
                 error:{message:"",isError:false},
-                message:action.payload
+                messages:action.payload
             }
         case 'FETCH_MESSAGE_FAIL':
             return{
