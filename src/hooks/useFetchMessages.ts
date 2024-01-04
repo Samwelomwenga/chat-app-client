@@ -35,7 +35,7 @@ const useFetchMessages = (currentChat: Chat) => {
       dispatchMessages({ type: "FETCH_MESSAGE_REQUEST" });
       try {
         const messages = await getRequest(
-          `${baseUrl}/messages/${currentChat._id}h`
+          `${baseUrl}/messages/${currentChat._id}`
         );
         if (!ignore) {
           dispatchMessages({
@@ -58,6 +58,6 @@ const useFetchMessages = (currentChat: Chat) => {
       ignore = true;
     };
   }, [currentChat._id]);
-    return messagesState;
+    return {messagesState,dispatchMessages};
 };
 export default useFetchMessages;

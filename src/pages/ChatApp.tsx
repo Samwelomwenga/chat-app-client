@@ -52,6 +52,8 @@ function ChatApp() {
   const userChats = chatContext.fetchChatsState.userChats;
   const updateCurrentChat = chatContext.updateCurrentChat;
   const currentChat = chatContext.currentChat;
+  const dispatchMessages = chatContext.dispatchMessages;
+  
   const [textMessage, setTextMessage] = useState("");
 
   const postMessageInitialState = {
@@ -85,9 +87,12 @@ function ChatApp() {
         text: textMessage,
         senderId: sender.id,
       });
-      console.log("response", response)
       dispatchPostMessage({
         type: "POST_MESSAGE_SUCCESS",
+        payload: response,
+      });
+      dispatchMessages({
+        type: "ADD_MESSAGE",
         payload: response,
       });
       setTextMessage("");

@@ -12,6 +12,7 @@ import { Chat } from "../pages/ChatApp";
 import useFetchMessages, {
   MessageInitialState,
 } from "../hooks/useFetchMessages";
+import { FetchMessageActions } from "../utils/functions/fetchMessageReducer";
 
 type ChatContextProps = {
   children: ReactNode;
@@ -21,6 +22,7 @@ type ChatContextState = {
   fetchChatsState: FetchChatsInitialState;
   potentialChatUsersState: PotentialChatUsersInitialState;
   messagesState: MessageInitialState;
+  dispatchMessages: React.Dispatch<FetchMessageActions>;
   updateCurrentChat: (chat: Chat) => void;
   currentChat: Chat;
 };
@@ -29,6 +31,7 @@ export const ChatContext = createContext<ChatContextState>({
   fetchChatsState,
   potentialChatUsersState,
   currentChat: { _id: "", members: [], createdAt: "", updatedAt: "" },
+  dispatchMessages:()=>{},
   messagesState:{
     messages:{messages:[]},
     loading:false,
@@ -48,7 +51,7 @@ export const ChatContextProvider = ({ children, user }: ChatContextProps) => {
   const updateCurrentChat = (chat: Chat) => {
     setCurrentChat(chat);
   };
-  const messagesState = useFetchMessages(currentChat);
+  const {messagesState,dispatchMessages} = useFetchMessages(currentChat);
   const fetchChatsState = useFetch(user);
   const potentialChatUsersState = useFetchPotentialChatUsers(
     fetchChatsState.userChats,
@@ -62,6 +65,7 @@ export const ChatContextProvider = ({ children, user }: ChatContextProps) => {
         potentialChatUsersState,
         updateCurrentChat,
         messagesState,
+        dispatchMessages,
         currentChat,
       }}
     >

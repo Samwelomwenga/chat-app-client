@@ -1,6 +1,6 @@
 import { MessageInitialState } from "../../hooks/useFetchMessages"
 import { Message } from "../../hooks/useFetchMessages"
-type FetchMessageActions={
+export type FetchMessageActions={
     type:"FETCH_MESSAGE_REQUEST"
 }
 |{
@@ -11,6 +11,7 @@ type FetchMessageActions={
     type:"FETCH_MESSAGE_FAIL"
     payload:{message:string,isError:boolean}
 }
+|{type:"ADD_MESSAGE",payload:Message}
 
 
 const fetchMessageReducer=(state:MessageInitialState,action:FetchMessageActions)=>{
@@ -33,6 +34,11 @@ const fetchMessageReducer=(state:MessageInitialState,action:FetchMessageActions)
                 ...state,
                 loading:false,
                 error:{message:action.payload.message,isError:true}
+            }
+        case 'ADD_MESSAGE':
+            return{
+                ...state,
+                messages:{messages:[...state.messages.messages,action.payload]}
             }
         default:
             return state

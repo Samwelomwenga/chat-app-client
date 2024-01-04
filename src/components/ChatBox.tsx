@@ -18,7 +18,7 @@ const ChatBox = () => {
   };
 
   const recipientState = useFetchRecipient(currentChat, user);
-  console.log("recipientState", recipientState);
+  console.log("messages", messages);
 
   return (
     <Box sx={{ bgcolor: "grey", pt: "1rem" }}>
