@@ -22,11 +22,13 @@ type ChatContextState = {
   potentialChatUsersState: PotentialChatUsersInitialState;
   messagesState: MessageInitialState;
   updateCurrentChat: (chat: Chat) => void;
+  currentChat: Chat;
 };
 
 export const ChatContext = createContext<ChatContextState>({
   fetchChatsState,
   potentialChatUsersState,
+  currentChat: { _id: "", members: [], createdAt: "", updatedAt: "" },
   messagesState:{
     messages:{messages:[]},
     loading:false,
@@ -60,6 +62,7 @@ export const ChatContextProvider = ({ children, user }: ChatContextProps) => {
         potentialChatUsersState,
         updateCurrentChat,
         messagesState,
+        currentChat,
       }}
     >
       {children}

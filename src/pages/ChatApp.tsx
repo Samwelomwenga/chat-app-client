@@ -4,8 +4,6 @@ import {
   AvatarGroup,
   Box,
   Button,
-  Card,
-  CardContent,
   InputAdornment,
   Stack,
   TextField,
@@ -17,6 +15,7 @@ import stringAvatar from "../utils/functions/stringAvatar";
 import { ChatContext } from "../context/ChatContext";
 import UserChat from "../components/UserChat";
 import PotentialChats from "../components/PotentialChats";
+import ChatBox from "../components/ChatBox";
 
 export type Chat = {
   _id: string;
@@ -42,7 +41,6 @@ function ChatApp() {
   const chatContext = useContext(ChatContext);
   const userChats = chatContext.fetchChatsState.userChats;
   const updateCurrentChat = chatContext.updateCurrentChat;
-  const messages=chatContext.messagesState.messages;
 
   return (
     <Box sx={{ height: "100vh", position: "relative" }}>
@@ -79,29 +77,17 @@ function ChatApp() {
       <Stack sx={{ px: ".5rem" }}>
         <AvatarGroup>
           {userChats.chats.map((chat, index) => (
-            
-            <Box key={index} sx={{"& :hover":{ cursor:"pointer"}}} onClick={()=>updateCurrentChat(chat)}>
-            <UserChat  chat={chat} user={user}/>
+            <Box
+              key={index}
+              sx={{ "& :hover": { cursor: "pointer" } }}
+              onClick={() => updateCurrentChat(chat)}
+            >
+              <UserChat chat={chat} user={user} />
             </Box>
           ))}
         </AvatarGroup>
-        {messages.messages.map((message,index)=>(<Card key={index} sx={{ width: "75%", mb: "2rem", bgcolor: "red" }}>
-          <CardContent>
-            <Typography>
-             {message.text}
-            </Typography>
-          </CardContent>
-        </Card>))}
 
-        
-        <Card sx={{ width: "75%" }}>
-          <CardContent>
-            <Typography>
-              Lorem ipsum dolor, sit amet consectng elit. Voluptas tenetur
-              repellenduBeatae?
-            </Typography>
-          </CardContent>
-        </Card>
+        <ChatBox />
       </Stack>
       <Stack
         direction={"row"}
