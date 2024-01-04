@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useReducer, useState } from "react";
 import {
   Avatar,
   AvatarGroup,
@@ -14,8 +14,12 @@ import { AuthContext } from "../context/AuthContext";
 import stringAvatar from "../utils/functions/stringAvatar";
 import { ChatContext } from "../context/ChatContext";
 import UserChat from "../components/UserChat";
+import { UserPayload as User } from "../context/AuthContext";
 import PotentialChats from "../components/PotentialChats";
 import ChatBox from "../components/ChatBox";
+import { Message } from "../hooks/useFetchMessages";
+import postMessageReducer from "../utils/functions/postMessageReducer";
+import { baseUrl, postRequest } from "../utils/services";
 
 export type Chat = {
   _id: string;
@@ -27,6 +31,12 @@ type Chats = Chat[];
 
 export type UserChats = {
   chats: Chats;
+};
+
+export type PostMessageInitialState = {
+  message: Message;
+  loading: boolean;
+  error: { message: string; isError: boolean };
 };
 
 function ChatApp() {
@@ -41,7 +51,55 @@ function ChatApp() {
   const chatContext = useContext(ChatContext);
   const userChats = chatContext.fetchChatsState.userChats;
   const updateCurrentChat = chatContext.updateCurrentChat;
+  const currentChat = chatContext.currentChat;
+  const [textMessage, setTextMessage] = useState("");
 
+  const postMessageInitialState = {
+    message: {
+      _id: "",
+      chatId: "",
+      text: "",
+      senderId: "",
+      createdAt: "",
+      updatedAt: "",
+    },
+    loading: false,
+    error: { message: "", isError: false },
+  };
+  const [, dispatchPostMessage] = useReducer(
+    postMessageReducer,
+    postMessageInitialState
+  );
+
+  const handleSendTextMessage = async (
+    textMessage: string,
+    sender: User,
+    currentChatId: string,
+    setTextMessage: (text: string) => void
+  ) => {
+    dispatchPostMessage({ type: "POST_MESSAGE_REQUEST" });
+    try {
+      if (textMessage.trim().length === 0) return;
+      const response = await postRequest(`${baseUrl}/messages`, {
+        chatId: currentChatId,
+        text: textMessage,
+        senderId: sender.id,
+      });
+      console.log("response", response)
+      dispatchPostMessage({
+        type: "POST_MESSAGE_SUCCESS",
+        payload: response,
+      });
+      setTextMessage("");
+    } catch (e) {
+      const error = e as Error;
+      console.log("error", error);
+      dispatchPostMessage({
+        type: "POST_MESSAGE_FAIL",
+        payload: error.message,
+      });
+    }
+  };
   return (
     <Box sx={{ height: "100vh", position: "relative" }}>
       <Box
@@ -107,6 +165,7 @@ function ChatApp() {
       <TextField
         sx={{ position: "absolute", bottom: ".4rem" }}
         placeholder="Type Message..."
+        onChange={(e) => setTextMessage(e.target.value)}
         fullWidth
         InputProps={{
           endAdornment: (
@@ -116,7 +175,18 @@ function ChatApp() {
               >
                 Send
               </Typography>
-              <SendRounded color="primary" fontSize="large" />
+              <SendRounded
+                color="primary"
+                fontSize="large"
+                onClick={() =>
+                  handleSendTextMessage(
+                    textMessage,
+                    user,
+                    currentChat._id,
+                    setTextMessage
+                  )
+                }
+              />
             </InputAdornment>
           ),
         }}
