@@ -2,7 +2,7 @@ import axios from 'axios';
 import { LoginInfoState, RegisterInfoState } from '../context/AuthContext';
 export const baseUrl = 'http://localhost:3000/api';
 
-export const postRequest = async(url:string,body:RegisterInfoState|LoginInfoState|{firstId:string;secondId:string})=>{
+export const postRequest = async(url:string,body:RegisterInfoState|LoginInfoState|{firstId:string;secondId:string}|{chatId:string,text:string,senderId:string})=>{
     const headers = {
         headers: {
             'Content-Type': 'application/json',
