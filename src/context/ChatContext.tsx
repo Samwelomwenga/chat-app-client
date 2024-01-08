@@ -86,6 +86,11 @@ export const ChatContextProvider = ({ children, user }: ChatContextProps) => {
         setOnlineUsers(onlineUsers);
       });
     }
+    return () => {
+      if (socket) {
+        socket.off("getOnlineUsers");
+      }
+    }
   }, [user.id, socket]);
   return (
     <ChatContext.Provider
