@@ -3,6 +3,8 @@ import { UserPayload as User } from "../context/AuthContext";
 import useFetchRecipient from "../hooks/useFetchRecipient";
 import { Avatar, Badge, styled } from "@mui/material";
 import stringAvatar from "../utils/functions/stringAvatar";
+import { useContext } from "react";
+import { ChatContext } from "../context/ChatContext";
 export const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
     backgroundColor: "#44b700",
@@ -33,12 +35,18 @@ export const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 function UserChat({ chat, user }: { chat: Chat; user: User }) {
   const recipient = useFetchRecipient(chat, user);
+  const onlineUsers=useContext(ChatContext).onlineUsers;
+  const isOnline=onlineUsers.some((onlineUser)=>onlineUser.userId===recipient.recipient?.user._id);
   return (
     <>
       <StyledBadge
         overlap="circular"
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         variant="dot"
+        sx={{"& .MuiBadge-badge":{
+          backgroundColor:!isOnline?"white":"#44b700",
+          color:!isOnline?"white":"#44b700",
+        }}}
       >
         <Avatar
           {...stringAvatar(recipient.recipient?.user.name || "Anonyms")}
