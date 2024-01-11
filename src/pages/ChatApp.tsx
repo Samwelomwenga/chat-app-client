@@ -82,7 +82,7 @@ function ChatApp() {
     dispatchPostMessage({ type: "POST_MESSAGE_REQUEST" });
     try {
       if (textMessage.trim().length === 0) return;
-      const response = await postRequest(`${baseUrl}/messages`, {
+      const response:Message = await postRequest(`${baseUrl}/messages`, {
         chatId: currentChatId,
         text: textMessage,
         senderId: sender.id,

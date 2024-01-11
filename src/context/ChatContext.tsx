@@ -37,6 +37,16 @@ export const ChatContext = createContext<ChatContextState>({
   dispatchMessages: () => {},
   messagesState: {
     messages: { messages: [] },
+      message: {
+        _id: "",
+        chatId: "",
+        senderId: "",
+        text: "",
+        createdAt: "",
+        updatedAt: "",
+      },
+      
+    
     loading: false,
     error: { message: "", isError: false },
   },
@@ -59,6 +69,7 @@ export const ChatContextProvider = ({ children, user }: ChatContextProps) => {
     setCurrentChat(chat);
   };
   const { messagesState, dispatchMessages } = useFetchMessages(currentChat);
+  console.log("message", messagesState.message)
   const fetchChatsState = useFetch(user);
   const potentialChatUsersState = useFetchPotentialChatUsers(
     fetchChatsState.userChats,
@@ -66,7 +77,6 @@ export const ChatContextProvider = ({ children, user }: ChatContextProps) => {
   );
   const [socket, setSocket] = useState<Socket | null>(null);
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
-  console.log("onlineUsers", onlineUsers);
 
   useEffect(() => {
     const newSocket = io("http://localhost:5000");
@@ -92,6 +102,19 @@ export const ChatContextProvider = ({ children, user }: ChatContextProps) => {
       }
     }
   }, [user.id, socket]);
+  // useEffect(() => {
+  //   if (socket) {
+  //     socket.emit("join", user.id);
+  //     socket.on("getOnlineUsers", (onlineUsers: OnlineUser[]) => {
+  //       setOnlineUsers(onlineUsers);
+  //     });
+  //   }
+  //   return () => {
+  //     if (socket) {
+  //       socket.off("getOnlineUsers");
+  //     }
+  //   }
+  // }, [user.id, socket]);
   return (
     <ChatContext.Provider
       value={{

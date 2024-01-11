@@ -14,12 +14,21 @@ export type Message = {
 
 export type MessageInitialState = {
   messages:{messages:Message []};
+  message: Message;
   loading: boolean;
   error: { message: string; isError: boolean };
 };
 const useFetchMessages = (currentChat: Chat) => {
   const messagesInitialState: MessageInitialState = {
     messages: {messages:[]},
+    message: {
+      _id: "",
+      chatId: "",
+      senderId: "",
+      text: "",
+      createdAt: "",
+      updatedAt: "",
+    },
     loading: false,
     error: { message: "", isError: false },
   };

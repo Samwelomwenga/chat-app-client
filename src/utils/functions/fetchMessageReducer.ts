@@ -38,7 +38,8 @@ const fetchMessageReducer=(state:MessageInitialState,action:FetchMessageActions)
         case 'ADD_MESSAGE':
             return{
                 ...state,
-                messages:{messages:[...state.messages.messages,action.payload]}
+                messages:{messages:[...state.messages.messages,action.payload]},
+                message:action.payload
             }
         default:
             return state
