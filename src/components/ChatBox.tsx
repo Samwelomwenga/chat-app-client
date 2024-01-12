@@ -22,7 +22,7 @@ const ChatBox = () => {
   const { recipient, loading } = recipientState;
 
   return (
-    <Box sx={{ pt: "1rem" }}>
+    <Box sx={{ py: "2rem" }}>
       <Typography variant="h6" sx={{ textAlign: "center" ,fontWeight:"600"}}>
         {recipient?.user.name}
       </Typography>
@@ -32,11 +32,11 @@ const ChatBox = () => {
         const isRecipient = recipient?.user._id === message.senderId;
 
         return (
-          <Box sx={{display:"flex",alignItems:"center",justifyContent:isRecipient?"flex-start":"flex-end"}}>
+          <Box   key={index} sx={{display:"flex",alignItems:"center",justifyContent:isRecipient?"flex-start":"flex-end"}}>
+          
           {isRecipient&&<Avatar {...stringAvatar(recipient?.user.name|| "Anonymous User")} />}
 
           <Card
-            key={index}
             sx={{
               width: "70%",
               mb: "2rem",

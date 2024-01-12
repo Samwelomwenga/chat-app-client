@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { SendRounded, BorderColorRounded } from "@mui/icons-material";
+import { SendRounded } from "@mui/icons-material";
 import { AuthContext } from "../context/AuthContext";
 import stringAvatar from "../utils/functions/stringAvatar";
 import { ChatContext } from "../context/ChatContext";
@@ -30,8 +30,6 @@ export type UserChats = {
   chats: Chats;
 };
 
-
-
 function ChatApp() {
   const authContext = useContext(AuthContext);
   const user = authContext?.postState.user || {
@@ -45,16 +43,15 @@ function ChatApp() {
   const userChats = chatContext.fetchChatsState.userChats;
   const updateCurrentChat = chatContext.updateCurrentChat;
   const currentChat = chatContext.currentChat;
-  
+
   const [textMessage, setTextMessage] = useState("");
   const handleSendTextMessage = useHandleSendTextMessage();
-
 
   return (
     <Box sx={{ height: "100vh", position: "relative" }}>
       <Box
         sx={{
-          bgcolor: "greenyellow",
+          bgcolor: "primary.dark",
           p: "1.5rem",
           mb: "1.5rem",
           width: "100%",
@@ -76,56 +73,49 @@ function ChatApp() {
         </Box>
         <Button
           onClick={() => logoutUser && logoutUser()}
-          variant="contained"
-          sx={{ mr: "auto" }}
+          variant="text"
+          sx={{
+            ml: "auto",
+            color: "black",
+            fontWeight: "bold",
+            fontSize: "1rem",
+          }}
         >
-          Logout
+          Log out
         </Button>
       </Box>
       <Stack sx={{ px: ".5rem" }}>
-        <AvatarGroup>
-          {userChats.chats.map((chat, index) => (
-            <Box
-              key={index}
-              sx={{ "& :hover": { cursor: "pointer" } }}
-              onClick={() => updateCurrentChat(chat)}
-            >
-              <UserChat chat={chat} user={user} />
-            </Box>
-          ))}
-        </AvatarGroup>
+        <Box sx={{ display: "flex", alignItems: "flex-start" }}>
+          <AvatarGroup>
+            {userChats.chats.map((chat, index) => (
+              <Box
+                key={index}
+                sx={{ "& :hover": { cursor: "pointer" } }}
+                onClick={() => updateCurrentChat(chat)}
+              >
+                <UserChat chat={chat} user={user} />
+              </Box>
+            ))}
+          </AvatarGroup>
+        </Box>
 
         <ChatBox />
       </Stack>
-      <Stack
-        direction={"row"}
-        spacing={1}
-        sx={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          mt: "1.5rem",
-        }}
-      >
-        <BorderColorRounded />
-      </Stack>
+
       <PotentialChats />
 
       <TextField
-        sx={{ position: "fixed", bottom: ".4rem",backgroundColor:"white" }}
+        sx={{
+          position: "fixed",
+          bottom: ".2rem",
+          backgroundColor: "lightgrey",
+        }}
         placeholder="Type Message..."
         onChange={(e) => setTextMessage(e.target.value)}
         fullWidth
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <Typography
-                sx={{ fontWeight: "bold", pr: ".3rem", fontSize: "1.2rem","& : hover":{
-                  cursor:"pointer"
-                } }}
-              >
-                Send
-              </Typography>
               <SendRounded
                 color="primary"
                 fontSize="large"
