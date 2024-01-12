@@ -10,6 +10,7 @@ import useFetchPotentialChatUsers, {
 } from "../hooks/useFetchPotentialChatUsers";
 import { Chat } from "../pages/ChatApp";
 import useFetchMessages, {
+  Message,
   MessageInitialState,
 } from "../hooks/useFetchMessages";
 import { FetchMessageActions } from "../utils/functions/fetchMessageReducer";
@@ -69,7 +70,8 @@ export const ChatContextProvider = ({ children, user }: ChatContextProps) => {
     setCurrentChat(chat);
   };
   const { messagesState, dispatchMessages } = useFetchMessages(currentChat);
-  console.log("message", messagesState.message)
+  const { message } = messagesState;
+  console.log("message", message)
   const fetchChatsState = useFetch(user);
   const potentialChatUsersState = useFetchPotentialChatUsers(
     fetchChatsState.userChats,
@@ -102,19 +104,25 @@ export const ChatContextProvider = ({ children, user }: ChatContextProps) => {
       }
     }
   }, [user.id, socket]);
-  // useEffect(() => {
-  //   if (socket) {
-  //     socket.emit("join", user.id);
-  //     socket.on("getOnlineUsers", (onlineUsers: OnlineUser[]) => {
-  //       setOnlineUsers(onlineUsers);
-  //     });
-  //   }
-  //   return () => {
-  //     if (socket) {
-  //       socket.off("getOnlineUsers");
-  //     }
-  //   }
-  // }, [user.id, socket]);
+  
+  useEffect(() => {
+    if (socket) {
+      const recipientId = currentChat.members.find((id: string) => id !== user.id);
+      socket.emit("sendMessage",{message, recipientId});
+      
+    }
+ 
+  }, [message, socket, currentChat, user.id]);
+  
+  useEffect(() => {
+    if (socket) {
+      socket.on("getMessage", (message:Message) => {
+       if(message.chatId !== currentChat._id) return;
+        dispatchMessages({ type: "ADD_MESSAGE", payload: message });
+      });
+    }
+  }, [socket, dispatchMessages, currentChat._id]);
+  
   return (
     <ChatContext.Provider
       value={{
