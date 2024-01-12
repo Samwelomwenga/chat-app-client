@@ -70,13 +70,8 @@ export const AuthProvider=({children}:AuthContextProps)=>{
   
       },[postDispatch])
       const logoutUser=()=>{
-        localStorage.removeItem("User")
-        postDispatch?.({type:"POST_USER_INFO_RESET", payload:{
-            id:"",
-            name:"",
-            email:"",
-            token:"",
-        }})
+        localStorage.removeItem("user")
+        postDispatch?.({type:"POST_USER_INFO_RESET"})
       }
   
 
