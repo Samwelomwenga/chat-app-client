@@ -49,7 +49,7 @@ function PotentialChats() {
     <SpeedDial
       ariaLabel="potential chat users speed dial"
       sx={{
-        position: "absolute",
+        position: "fixed",
         bottom: 66,
         right: 10,
         "& .MuiSpeedDial-actions": {
