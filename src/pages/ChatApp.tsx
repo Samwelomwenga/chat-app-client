@@ -163,12 +163,11 @@ function ChatApp() {
         }}
       >
         <BorderColorRounded />
-        <Typography sx={{ fontStyle: "italic" }}>Killer is typing</Typography>
       </Stack>
       <PotentialChats />
 
       <TextField
-        sx={{ position: "absolute", bottom: ".4rem" }}
+        sx={{ position: "fixed", bottom: ".4rem",backgroundColor:"white" }}
         placeholder="Type Message..."
         onChange={(e) => setTextMessage(e.target.value)}
         fullWidth
@@ -176,13 +175,16 @@ function ChatApp() {
           endAdornment: (
             <InputAdornment position="end">
               <Typography
-                sx={{ fontWeight: "bold", pr: ".3rem", fontSize: "1.2rem" }}
+                sx={{ fontWeight: "bold", pr: ".3rem", fontSize: "1.2rem","& : hover":{
+                  cursor:"pointer"
+                } }}
               >
                 Send
               </Typography>
               <SendRounded
                 color="primary"
                 fontSize="large"
+                sx={{ "& :hover": { cursor: "pointer" } }}
                 onClick={() =>
                   handleSendTextMessage(
                     textMessage,
