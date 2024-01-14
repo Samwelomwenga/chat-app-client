@@ -1,6 +1,5 @@
 import { useEffect, useReducer } from "react";
 import { UserPayload as User } from "../context/AuthContext";
-// import { RecipientDetails as Users } from "./useFetchRecipient";
 
 import { baseUrl, getRequest } from "../utils/services";
 import { UserChats } from "../pages/ChatApp";
