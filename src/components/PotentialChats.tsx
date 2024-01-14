@@ -12,6 +12,16 @@ import { baseUrl, postRequest } from "../utils/services";
 import fetchChatsReducer from "../utils/functions/fetchChatsReducer";
 import { fetchChatsInitialState } from "../hooks/useFetch";
 import { AuthContext } from "../context/AuthContext";
+import { UserChats } from "../pages/ChatApp";
+import axios from "axios";
+
+export type AxiosError = {
+  response?: {
+    data: {
+      message: string;
+    };
+  };
+};
 
 function PotentialChats() {
   const chatContext = useContext(ChatContext);
@@ -32,13 +42,20 @@ function PotentialChats() {
   const handleCreateChat=async(firstId:string,secondId:string)=>{
     dispatchFetchChats({ type: "FETCH_CHATS_REQUEST" });
     try {
-      const response= await postRequest(`${baseUrl}/chats`,{firstId,secondId});
+      const response= await postRequest<{firstId:string; secondId:string;},UserChats>(`${baseUrl}/chats`,{firstId,secondId});
       dispatchFetchChats({ type: "FETCH_CHATS_SUCCESS", payload: response });
       
-    } catch (e) {
-      const error = e as Error;
-      console.log(error.message)
-      dispatchFetchChats({ type: "FETCH_CHATS_FAIL", payload: {message:error.message,isError:true} });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+        const message = axiosError.response?.data.message ;
+        console.log(message)
+        dispatchFetchChats({ type: "FETCH_CHATS_FAIL", payload: {message:message||"",isError:true} });
+       
+      } else {
+        const e = error as Error;
+        dispatchFetchChats({ type: "FETCH_CHATS_FAIL", payload: {message:e.message||"",isError:true} });
+      }
       
 
     }

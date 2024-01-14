@@ -4,31 +4,47 @@ import {
   Typography,
   Paper,
   FormLabel,
-  Link,
   Stack,
 } from "@mui/material";
-import { Google as GoogleIcon, Facebook } from "@mui/icons-material";
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import {
+  AuthContext,
+  LoginInfoState,
+  UserPayload as User,
+} from "../context/AuthContext";
 import { baseUrl, postRequest } from "../utils/services";
+import axios from "axios";
+import { AxiosError } from "../components/PotentialChats";
 
 function Login() {
-  const context = useContext(AuthContext);
-  const postDispatch = context?.postDispatch;
-  const loginInfo = context?.loginInfo;
-  const loginInfoDispatch = context?.loginInfoDispatch;
+  const authContext = useContext(AuthContext);
+  const postState = authContext?.postState;
+  const error = postState?.error;
+  const postDispatch = authContext?.postDispatch;
+  const loginInfo = authContext?.loginInfo;
+  const loginInfoDispatch = authContext?.loginInfoDispatch;
 
   const handleLoginUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("clicked")
     postDispatch?.({ type: "POST_USER_INFO_REQUEST" });
     if (loginInfo) {
-      const res = await postRequest(`${baseUrl}/users/login`, loginInfo);
-      if (res.error) {
-        postDispatch?.({ type: "POST_USER_INFO_FAIL", payload: res.error });
+      try {
+        const res = await postRequest<LoginInfoState, User>(
+          `${baseUrl}/users/login`,
+          loginInfo
+        );
+        postDispatch?.({ type: "POST_USER_INFO_SUCCESS", payload: res });
+        localStorage.setItem("user", JSON.stringify(res));
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const axiosError = error as AxiosError;
+          const message = axiosError.response?.data.message;
+          postDispatch?.({
+            type: "POST_USER_INFO_FAIL",
+            payload: { message:message||"", isError: true },
+          });
+        }
       }
-      postDispatch?.({ type: "POST_USER_INFO_SUCCESS", payload: res });
-      localStorage.setItem("user", JSON.stringify(res));
     }
   };
   return (
@@ -62,13 +78,19 @@ function Login() {
             Email
           </FormLabel>
           <TextField
+            value={loginInfo?.email}
             variant="outlined"
             type="email"
             fullWidth
             margin="dense"
             size="small"
             placeholder="johndoe@gmail.com"
-            onChange={(e) =>loginInfoDispatch?.({type:"SET_EMAIL",payload:e.target.value})}
+            onChange={(e) =>
+              loginInfoDispatch?.({
+                type: "SET_EMAIL",
+                payload: e.target.value,
+              })
+            }
           />
           <FormLabel sx={{ fontWeight: "bold", fontSize: "1rem" }}>
             Password
@@ -79,24 +101,22 @@ function Login() {
             fullWidth
             margin="dense"
             size="small"
-            onChange={(e) =>loginInfoDispatch?.({type:"SET_PASSWORD",payload:e.target.value})}
+            onChange={(e) =>
+              loginInfoDispatch?.({
+                type: "SET_PASSWORD",
+                payload: e.target.value,
+              })
+            }
           />
-          <Button  type="submit" variant="contained" fullWidth sx={{ my: "1rem" }}>
-            Login
-          </Button>
-          <Button variant="outlined" fullWidth startIcon={<GoogleIcon />}>
-            {" "}
-            Login with Google
-          </Button>
+          {error && <Typography>{error.message}</Typography>}
           <Button
-            variant="outlined"
+            type="submit"
+            variant="contained"
             fullWidth
-            startIcon={<Facebook />}
             sx={{ my: "1rem" }}
           >
-            Login with Facebook{" "}
+            Login
           </Button>
-          <Link sx={{ pl: "5rem" }}> Forgot Your Password?</Link>
         </form>
       </Paper>
     </Stack>

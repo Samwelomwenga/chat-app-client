@@ -39,7 +39,7 @@ const useFetchPotentialChatUsers = (userChats: UserChats, user: User) => {
     const getPotentialChatUsers = async () => {
       dispatchPotentialChatUsers({ type: "FETCH_CHATS_REQUEST" });
       try {
-        const users: Users = await getRequest(`${baseUrl}/users`);
+        const users = await getRequest<Users>(`${baseUrl}/users`);
 
         const potentialChatUsers = users.users.filter((u) => {
           let isChatCreated = false;

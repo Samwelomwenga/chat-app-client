@@ -27,7 +27,7 @@ const useFetch = (user:User) => {
         if (user.id) {
             dispatchFetchChats({ type: "FETCH_CHATS_REQUEST" });
             try {
-              const userChats = await getRequest(`${baseUrl}/chats/${user.id}`);
+              const userChats = await getRequest<UserChats>(`${baseUrl}/chats/${user.id}`);
               if (!ignore) {
                 dispatchFetchChats({
                   type: "FETCH_CHATS_SUCCESS",

@@ -6,7 +6,7 @@ export type PostUserInfoAction =
       type: "POST_USER_INFO_SUCCESS";
       payload: UserPayload;
     }
-  | { type: "POST_USER_INFO_FAIL"; payload: { message: string; error: boolean; } }
+  | { type: "POST_USER_INFO_FAIL"; payload: { message: string; isError: boolean; } }
   | { type: "POST_USER_INFO_RESET";  };
 
 const postUserInfoReducer = (
@@ -33,7 +33,7 @@ const postUserInfoReducer = (
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: {message:action.payload.message,isError:action.payload.isError},
       };
     }
     case "POST_USER_INFO_RESET":{

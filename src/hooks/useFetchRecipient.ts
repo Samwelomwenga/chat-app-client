@@ -10,18 +10,17 @@ type Chat = {
 };
 
 export type RecipientDetails = {
-  user:{
-
+  user: {
     _id: string;
     name: string;
     email: string;
     password: string;
     createdAt: string;
     updatedAt: string;
-  }
+  };
 };
 export type RecipientInitialState = {
-  recipient: RecipientDetails| null;
+  recipient: RecipientDetails | null;
   loading: boolean;
   error: { message: string; isError: boolean } | null;
 };
@@ -43,7 +42,7 @@ const useFetchRecipient = (chat: Chat, user: User) => {
       if (!recipientId) return;
       dispatchRecipient({ type: "FETCH_RECIPIENT_REQUEST" });
       try {
-        const recipient = await getRequest(
+        const recipient = await getRequest<RecipientDetails>(
           `${baseUrl}/users/find/${recipientId}`
         );
         if (!ignore) {

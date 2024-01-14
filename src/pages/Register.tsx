@@ -1,8 +1,10 @@
 import React, { useContext} from "react";
 import { Button, TextField, Typography, Paper, FormLabel, Link, Stack } from "@mui/material";
 import {Google as GoogleIcon,Facebook} from '@mui/icons-material';
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext,  RegisterInfoState, UserPayload } from "../context/AuthContext";
 import { baseUrl, postRequest } from "../utils/services";
+import axios from "axios";
+import { AxiosError } from "../components/PotentialChats";
 
 
 function Register() {
@@ -18,14 +20,25 @@ function Register() {
     const handleRegisterUser=async (e:React.FormEvent<HTMLFormElement>)=>{
       e.preventDefault();
       postDispatch?.({type: "POST_USER_INFO_REQUEST"});
-      if (userInfo) {
-        const res= await postRequest(`${baseUrl}/users/register`,userInfo)
-        if (res.error) {
-          postDispatch?.({type: "POST_USER_INFO_FAIL", payload: res.error});
+      try {
+        
+        if (userInfo) {
+          const res= await postRequest<RegisterInfoState,UserPayload>(`${baseUrl}/users/register`,userInfo)
+         
+          postDispatch?.({type: "POST_USER_INFO_SUCCESS", payload: res});
+          localStorage.setItem("user",JSON.stringify(res))
+  
         }
-        postDispatch?.({type: "POST_USER_INFO_SUCCESS", payload: res});
-        localStorage.setItem("user",JSON.stringify(res))
-
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const axiosError = error as AxiosError;
+          const message = axiosError.response?.data.message;
+          postDispatch?.({
+            type: "POST_USER_INFO_FAIL",
+            payload: { message:message||"", isError: true },
+          });
+        }
+        
       }
     }
 
@@ -59,7 +72,7 @@ function Register() {
         <Button variant="contained" fullWidth sx={{my:"1rem"}} type="submit">Sign Up</Button>
         <Button variant="outlined" fullWidth startIcon={<GoogleIcon/>} href="#">  Sign Up with Google</Button>
         <Button variant="outlined" fullWidth startIcon={<Facebook/> } sx={{my:"1rem"}} href="#">Sign Up with Facebook </Button>
-        {postState?.error?.error&&<Typography>{postState?.error?.error&&postState.error.message}</Typography>}
+        {postState?.error?.isError&&<Typography>{postState?.error?.message&&postState.error.message}</Typography>}
         <Link href="/login" sx={{pl:"3rem"}}>Already have an account? Login here</Link>
         </form>
 

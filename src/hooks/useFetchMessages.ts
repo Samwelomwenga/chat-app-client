@@ -43,7 +43,7 @@ const useFetchMessages = (currentChat: Chat) => {
     const getMessages = async () => {
       dispatchMessages({ type: "FETCH_MESSAGE_REQUEST" });
       try {
-        const messages = await getRequest(
+        const messages = await getRequest<{messages:Message[]}>(
           `${baseUrl}/messages/${currentChat._id}`
         );
         if (!ignore) {

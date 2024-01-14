@@ -10,6 +10,11 @@ export type PostMessageInitialState = {
   loading: boolean;
   error: { message: string; isError: boolean };
 };
+type PostMessage = {
+  chatId: string;
+  text: string;
+  senderId: string;
+};
 const useHandleSendTextMessage = () => {
 const chatContext = useContext(ChatContext);
 const dispatchMessages = chatContext.dispatchMessages;
@@ -39,7 +44,7 @@ const handleSendTextMessage = async (
     dispatchPostMessage({ type: "POST_MESSAGE_REQUEST" });
     try {
       if (textMessage.trim().length === 0) return;
-      const response:Message = await postRequest(`${baseUrl}/messages`, {
+      const response = await postRequest<PostMessage,Message>(`${baseUrl}/messages`, {
         chatId: currentChatId,
         text: textMessage,
         senderId: sender.id,

@@ -20,7 +20,7 @@ export type PostUserInfoState={
 
     };
     error:{
-        error:boolean;
+        isError:boolean;
         message:string;
     }|null;
     loading:boolean;
