@@ -5,6 +5,8 @@ import {
   Paper,
   FormLabel,
   Stack,
+  Link,
+  Box,
 } from "@mui/material";
 import { useContext } from "react";
 import {
@@ -61,7 +63,7 @@ function Login() {
       <Stack>
         <Typography
           variant="h4"
-          sx={{ py: "1rem", fontWeight: "bold", textAlign: "center" }}
+          sx={{ pt: "5rem",pb:"1rem", fontWeight: "bold", textAlign: "center" }}
         >
           Login
         </Typography>
@@ -69,7 +71,9 @@ function Login() {
           Enter your username and password to login to your account
         </Typography>
       </Stack>
-      <Paper sx={{ gap: 4, display: "grid", px: ".7rem", py: "1rem" }}>
+      <Box display="flex" justifyContent="center">
+
+      <Paper sx={{ gap: 4, display: "grid", px: ".7rem", py: {xs:"1rem",md:"6rem"},width:{md:"50%"},marginLeft:"auto",marginRight:"auto" }}>
         <Typography sx={{ fontWeight: "bold", fontSize: "1.5rem" }}>
           Sign In
         </Typography>
@@ -108,7 +112,7 @@ function Login() {
               })
             }
           />
-          {error && <Typography>{error.message}</Typography>}
+          {error?.isError && <Typography>{error.isError}</Typography>}
           <Button
             type="submit"
             variant="contained"
@@ -117,8 +121,11 @@ function Login() {
           >
             Login
           </Button>
+        <Link href="/register" sx={{pl:{xs:"3rem",md:"10rem"}}}>Don`t have an account? Sign Up here</Link>
+
         </form>
       </Paper>
+      </Box>
     </Stack>
   );
 }
