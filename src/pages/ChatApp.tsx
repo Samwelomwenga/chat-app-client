@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
 import {
   Avatar,
-  AvatarGroup,
+  
   Box,
   Button,
   InputAdornment,
-  Stack,
+  
   TextField,
   Typography,
 } from "@mui/material";
@@ -13,10 +13,10 @@ import { SendRounded } from "@mui/icons-material";
 import { AuthContext } from "../context/AuthContext";
 import stringAvatar from "../utils/functions/stringAvatar";
 import { ChatContext } from "../context/ChatContext";
-import UserChat from "../components/UserChat";
 import PotentialChats from "../components/PotentialChats";
 import ChatBox from "../components/ChatBox";
 import useHandleSendTextMessage from "../hooks/useHandleSendTextMessage";
+import Chats from "../components/Chats";
 
 export type Chat = {
   _id: string;
@@ -40,8 +40,6 @@ function ChatApp() {
   };
   const logoutUser = authContext?.logoutUser;
   const chatContext = useContext(ChatContext);
-  const userChats = chatContext.fetchChatsState.userChats;
-  const updateCurrentChat = chatContext.updateCurrentChat;
   const currentChat = chatContext.currentChat;
 
   const [textMessage, setTextMessage] = useState("");
@@ -53,7 +51,10 @@ function ChatApp() {
         sx={{
           bgcolor: "primary.dark",
           p: "1.5rem",
-          mb: "1.5rem",
+          mb: {xs:"1.5rem",md:"0"},
+          px:{
+            md:"7.5rem",
+          },
           width: "100%",
           display: "flex",
           gap: "5rem",
@@ -84,23 +85,10 @@ function ChatApp() {
           Log out
         </Button>
       </Box>
-      <Stack sx={{ px: ".5rem" }}>
-        <Box sx={{ display: "flex", alignItems: "flex-start" }}>
-          <AvatarGroup>
-            {userChats.chats.map((chat, index) => (
-              <Box
-                key={index}
-                sx={{ "& :hover": { cursor: "pointer" } }}
-                onClick={() => updateCurrentChat(chat)}
-              >
-                <UserChat chat={chat} user={user} />
-              </Box>
-            ))}
-          </AvatarGroup>
-        </Box>
-
+      <Box sx={{display:{md:"grid"},gridTemplateColumns:"1fr 3fr"}}>
+     <Chats/>
+      <Box>
         <ChatBox />
-      </Stack>
 
       <PotentialChats />
 
@@ -133,6 +121,8 @@ function ChatApp() {
           ),
         }}
       />
+      </Box>
+      </Box>
     </Box>
   );
 }

@@ -22,8 +22,8 @@ const ChatBox = () => {
   const { recipient, loading } = recipientState;
 
   return (
-    <Box sx={{ py: "2rem" }}>
-      <Typography variant="h6" sx={{ textAlign: "center" ,fontWeight:"600"}}>
+    <Box sx={{px:{xs:".5rem",md:"2rem"},mb:"2rem" }}>
+      <Typography variant="h5" sx={{  py: {xs:"1rem",md:"3rem"},textAlign: "center" ,fontWeight:"600"}}>
         {recipient?.user.name}
       </Typography>
       {loading && <Typography>Loading...</Typography>}
@@ -38,7 +38,7 @@ const ChatBox = () => {
 
           <Card
             sx={{
-              width: "70%",
+              width: {xs:"max-content",md:"50%"},
               mb: "2rem",
               bgcolor: !isRecipient ? "lightgreen" : "primary.main",
             }}
