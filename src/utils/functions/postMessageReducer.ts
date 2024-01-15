@@ -1,5 +1,5 @@
 import { Message } from "../../hooks/useFetchMessages";
-import { PostMessageInitialState } from "../../pages/ChatApp";
+import { PostMessageInitialState } from "../../hooks/useHandleSendTextMessage";
 type PostMessageAction =
 |{
     type:"POST_MESSAGE_REQUEST"

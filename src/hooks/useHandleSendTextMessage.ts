@@ -16,10 +16,10 @@ type PostMessage = {
   senderId: string;
 };
 const useHandleSendTextMessage = () => {
-const chatContext = useContext(ChatContext);
-const dispatchMessages = chatContext.dispatchMessages;
+  const chatContext = useContext(ChatContext);
+  const dispatchMessages = chatContext.dispatchMessages;
 
-const postMessageInitialState:PostMessageInitialState = {
+  const postMessageInitialState: PostMessageInitialState = {
     message: {
       _id: "",
       chatId: "",
@@ -35,7 +35,7 @@ const postMessageInitialState:PostMessageInitialState = {
     postMessageReducer,
     postMessageInitialState
   );
-const handleSendTextMessage = async (
+  const handleSendTextMessage = async (
     textMessage: string,
     sender: User,
     currentChatId: string,
@@ -44,11 +44,14 @@ const handleSendTextMessage = async (
     dispatchPostMessage({ type: "POST_MESSAGE_REQUEST" });
     try {
       if (textMessage.trim().length === 0) return;
-      const response = await postRequest<PostMessage,Message>(`${baseUrl}/messages`, {
-        chatId: currentChatId,
-        text: textMessage,
-        senderId: sender.id,
-      });
+      const response = await postRequest<PostMessage, Message>(
+        `${baseUrl}/messages`,
+        {
+          chatId: currentChatId,
+          text: textMessage,
+          senderId: sender.id,
+        }
+      );
       dispatchPostMessage({
         type: "POST_MESSAGE_SUCCESS",
         payload: response,
@@ -68,5 +71,5 @@ const handleSendTextMessage = async (
     }
   };
   return handleSendTextMessage;
-}
-  export default useHandleSendTextMessage;
+};
+export default useHandleSendTextMessage;
