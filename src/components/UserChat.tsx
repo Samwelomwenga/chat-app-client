@@ -54,6 +54,8 @@ function UserChat({ chat, user }: { chat: Chat; user: User }) {
               justifyContent: "space-between",
               mt:".5rem",
               p:"1rem",
+              backgroundColor:"skyblue",
+              
               "& :hover": { cursor: "pointer" },
             }}
           >
