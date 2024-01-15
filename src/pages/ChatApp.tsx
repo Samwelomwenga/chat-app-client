@@ -97,10 +97,13 @@ function ChatApp() {
           position: "fixed",
           bottom: ".2rem",
           backgroundColor: "lightgrey",
+          width:{
+            md:"90rem"
+          }
         }}
         placeholder="Type Message..."
         onChange={(e) => setTextMessage(e.target.value)}
-        fullWidth
+        // fullWidth
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
