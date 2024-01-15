@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import {
   Button,
   TextField,
@@ -17,22 +17,53 @@ import {
 import { baseUrl, postRequest } from "../utils/services";
 import axios from "axios";
 import { AxiosError } from "../components/PotentialChats";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 function Register() {
   const context = useContext(AuthContext);
   const userInfo = context?.userInfo;
   const userInfoDispatch = context?.userInfoDispatch;
-  const postState = context?.postState;
   const postDispatch = context?.postDispatch;
 
-  const handleRegisterUser = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const registerSchema = z.object({
+    name: z
+      .string()
+      .min(1, { message: "Name is required" })
+      .min(3, { message: "Name must be at least 3 characters" })
+      .max(30)
+      .refine((value) => value.trim().split(/\s+/).length == 2, {
+        message: "Name must include first and last name",
+      }),
+    email: z
+      .string()
+      .email()
+      .min(1, { message: "Email is required" })
+      .min(3, { message: "Email must be at least 3 characters" })
+      .max(20),
+    password: z
+      .string()
+      .min(1, { message: "Password is required" })
+      .min(8, { message: "Password must be at least 8 characters" })
+      .max(20),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterInfoState>({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const handleRegisterUser = async (data: RegisterInfoState) => {
     postDispatch?.({ type: "POST_USER_INFO_REQUEST" });
     try {
       if (userInfo) {
         const res = await postRequest<RegisterInfoState, UserPayload>(
           `${baseUrl}/users/register`,
-          userInfo
+          data
         );
 
         postDispatch?.({ type: "POST_USER_INFO_SUCCESS", payload: res });
@@ -84,14 +115,18 @@ function Register() {
             px: { xs: ".7rem", md: "2rem" },
             py: { xs: "1rem", md: "5rem" },
             width: {
-              md: "50%",
+              md: "40rem",
             },
           }}
         >
           <Typography sx={{ fontWeight: "bold", fontSize: "1.5rem" }}>
             Create Account
           </Typography>
-          <form autoComplete="off" noValidate onSubmit={handleRegisterUser}>
+          <form
+            autoComplete="off"
+            noValidate
+            onSubmit={handleSubmit(handleRegisterUser)}
+          >
             <FormLabel sx={{ fontWeight: "bold", fontSize: "1rem" }}>
               Username
             </FormLabel>
@@ -101,6 +136,7 @@ function Register() {
               margin="dense"
               size="small"
               placeholder="John Doe"
+              {...register("name")}
               onChange={(e) => {
                 userInfoDispatch?.({
                   type: "SET_NAME",
@@ -108,6 +144,11 @@ function Register() {
                 });
               }}
             />
+            {errors.name && (
+              <Typography sx={{ color: "red" }}>
+                {errors.name.message}
+              </Typography>
+            )}
             <FormLabel sx={{ fontWeight: "bold", fontSize: "1rem" }}>
               Email
             </FormLabel>
@@ -118,6 +159,7 @@ function Register() {
               margin="dense"
               size="small"
               placeholder="johndoe@gmail.com"
+              {...register("email")}
               onChange={(e) => {
                 userInfoDispatch?.({
                   type: "SET_EMAIL",
@@ -125,6 +167,11 @@ function Register() {
                 });
               }}
             />
+            {errors.email && (
+              <Typography sx={{ color: "red" }}>
+                {errors.email.message}
+              </Typography>
+            )}
 
             <FormLabel sx={{ fontWeight: "bold", fontSize: "1rem" }}>
               Password
@@ -135,6 +182,7 @@ function Register() {
               fullWidth
               margin="dense"
               size="small"
+              {...register("password")}
               onChange={(e) => {
                 userInfoDispatch?.({
                   type: "SET_PASSWORD",
@@ -142,6 +190,11 @@ function Register() {
                 });
               }}
             />
+            {errors.password && (
+              <Typography sx={{ color: "red" }}>
+                {errors.password.message}
+              </Typography>
+            )}
             <Button
               variant="contained"
               fullWidth
@@ -150,12 +203,8 @@ function Register() {
             >
               Sign Up
             </Button>
-            {postState?.error?.isError && (
-              <Typography>
-                {postState?.error?.message && postState.error.message}
-              </Typography>
-            )}
-            <Link href="/login" sx={{ pl: { xs: "3rem", md: "20rem" } }}>
+
+            <Link href="/login" sx={{ pl: { xs: "3rem", md: "10rem" } }}>
               Already have an account? Login here
             </Link>
           </form>
