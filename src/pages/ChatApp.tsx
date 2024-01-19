@@ -44,7 +44,6 @@ function ChatApp() {
 
   const [textMessage, setTextMessage] = useState("");
   const resetTextMessage = () => setTextMessage("");
-  console.log("textMessage", textMessage)
   const handleSendTextMessage = useHandleSendTextMessage();
 
   return (
@@ -101,12 +100,12 @@ function ChatApp() {
           bottom: ".2rem",
           backgroundColor: "lightgrey",
           width:{
+            xs:"100%",
             md:"90rem"
           }
         }}
         placeholder="Type Message..."
         onChange={(e) => setTextMessage(e.target.value)}
-        // fullWidth
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
