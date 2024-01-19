@@ -18,7 +18,7 @@ type PostMessage = {
 const useHandleSendTextMessage = () => {
   const chatContext = useContext(ChatContext);
   const dispatchMessages = chatContext.dispatchMessages;
-  const setMessageSend=chatContext.setMessageSend
+  const setMessageSend = chatContext.setMessageSend;
 
   const postMessageInitialState: PostMessageInitialState = {
     message: {
@@ -40,7 +40,7 @@ const useHandleSendTextMessage = () => {
     textMessage: string,
     sender: User,
     currentChatId: string,
-    setTextMessage: (text: string) => void
+    resetTextMessage: () => void
   ) => {
     dispatchPostMessage({ type: "POST_MESSAGE_REQUEST" });
     try {
@@ -61,7 +61,7 @@ const useHandleSendTextMessage = () => {
         type: "ADD_MESSAGE",
         payload: response,
       });
-      setTextMessage("");
+      resetTextMessage();
       setMessageSend();
     } catch (e) {
       const error = e as Error;

@@ -43,6 +43,8 @@ function ChatApp() {
   const currentChat = chatContext.currentChat;
 
   const [textMessage, setTextMessage] = useState("");
+  const resetTextMessage = () => setTextMessage("");
+  console.log("textMessage", textMessage)
   const handleSendTextMessage = useHandleSendTextMessage();
 
   return (
@@ -93,6 +95,7 @@ function ChatApp() {
       <PotentialChats />
 
       <TextField
+      value={textMessage}
         sx={{
           position: "fixed",
           bottom: ".2rem",
@@ -116,7 +119,7 @@ function ChatApp() {
                     textMessage,
                     user,
                     currentChat._id,
-                    setTextMessage
+                    resetTextMessage
                   )
                 }
               />
