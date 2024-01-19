@@ -18,7 +18,9 @@ function Chats() {
   return (
     <Stack
       sx={{
-        px: ".5rem",
+        position:"sticky",
+        top: ".4rem",
+        px: "1rem",
         flexDirection: {
           xs: "row",
           md: "column",
@@ -29,7 +31,7 @@ function Chats() {
         },
       }}
     >
-      {!userChats.chats.length && <Typography variant="h3">No chats yet</Typography>}
+      {!userChats.chats.length && <Typography >No chats yet</Typography>}
       {userChats.chats.map((chat, index) => (
         <UserChat key={index} chat={chat} user={user} />
       ))}

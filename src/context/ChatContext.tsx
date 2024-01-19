@@ -83,13 +83,11 @@ export const ChatContextProvider = ({ children, user }: ChatContextProps) => {
   const setMessageSend = () => {
     setIsMessageSent(true);
   }
-  console.log("isMessageSent",isMessageSent)
 
   useEffect(() => {
     const newSocket = io("http://localhost:5000");
     setSocket(newSocket);
     newSocket.on("connect", () => {
-      console.log("connected to socket", newSocket.id);
     });
 
     return () => {
@@ -115,7 +113,6 @@ export const ChatContextProvider = ({ children, user }: ChatContextProps) => {
       const recipientId = currentChat.members.find(
         (id: string) => id !== user.id
       );
-      console.log("message", message,"\n","socketId",socket.id,"\n","currentChatId",currentChat._id,"\n","userId",user.id,);
       socket.emit("sendMessage", { message, recipientId });
       setIsMessageSent(false);
     }
