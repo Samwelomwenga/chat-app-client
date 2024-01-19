@@ -18,6 +18,7 @@ type PostMessage = {
 const useHandleSendTextMessage = () => {
   const chatContext = useContext(ChatContext);
   const dispatchMessages = chatContext.dispatchMessages;
+  const setMessageSend=chatContext.setMessageSend
 
   const postMessageInitialState: PostMessageInitialState = {
     message: {
@@ -61,6 +62,7 @@ const useHandleSendTextMessage = () => {
         payload: response,
       });
       setTextMessage("");
+      setMessageSend();
     } catch (e) {
       const error = e as Error;
       console.log("error", error);

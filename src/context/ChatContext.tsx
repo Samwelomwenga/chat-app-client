@@ -29,25 +29,26 @@ type ChatContextState = {
   updateCurrentChat: (chat: Chat) => void;
   currentChat: Chat;
   onlineUsers: OnlineUser[];
+  setMessageSend:()=>void
 };
 
 export const ChatContext = createContext<ChatContextState>({
   fetchChatsState,
   potentialChatUsersState,
+  setMessageSend:()=>{},
   currentChat: { _id: "", members: [], createdAt: "", updatedAt: "" },
   dispatchMessages: () => {},
   messagesState: {
     messages: { messages: [] },
-      message: {
-        _id: "",
-        chatId: "",
-        senderId: "",
-        text: "",
-        createdAt: "",
-        updatedAt: "",
-      },
-      
-    
+    message: {
+      _id: "",
+      chatId: "",
+      senderId: "",
+      text: "",
+      createdAt: "",
+      updatedAt: "",
+    },
+
     loading: false,
     error: { message: "", isError: false },
   },
@@ -71,7 +72,6 @@ export const ChatContextProvider = ({ children, user }: ChatContextProps) => {
   };
   const { messagesState, dispatchMessages } = useFetchMessages(currentChat);
   const { message } = messagesState;
-  console.log("message", message)
   const fetchChatsState = useFetch(user);
   const potentialChatUsersState = useFetchPotentialChatUsers(
     fetchChatsState.userChats,
@@ -79,6 +79,11 @@ export const ChatContextProvider = ({ children, user }: ChatContextProps) => {
   );
   const [socket, setSocket] = useState<Socket | null>(null);
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
+  const [isMessageSent, setIsMessageSent] = useState(false);
+  const setMessageSend = () => {
+    setIsMessageSent(true);
+  }
+  console.log("isMessageSent",isMessageSent)
 
   useEffect(() => {
     const newSocket = io("http://localhost:5000");
@@ -102,27 +107,35 @@ export const ChatContextProvider = ({ children, user }: ChatContextProps) => {
       if (socket) {
         socket.off("getOnlineUsers");
       }
-    }
+    };
   }, [user.id, socket]);
-  
+
   useEffect(() => {
-    if (socket) {
-      const recipientId = currentChat.members.find((id: string) => id !== user.id);
-      socket.emit("sendMessage",{message, recipientId});
-      
+    if (socket&&isMessageSent) {
+      const recipientId = currentChat.members.find(
+        (id: string) => id !== user.id
+      );
+      console.log("message", message,"\n","socketId",socket.id,"\n","currentChatId",currentChat._id,"\n","userId",user.id,);
+      socket.emit("sendMessage", { message, recipientId });
+      setIsMessageSent(false);
     }
- 
-  }, [message, socket, currentChat, user.id]);
-  
+  }, [message, socket, currentChat, user.id,isMessageSent]);
+
   useEffect(() => {
     if (socket) {
-      socket.on("getMessage", (message:Message) => {
-       if(message.chatId !== currentChat._id) return;
+      const handleGetMessage = (message: Message) => {
+        if ( message.chatId !== currentChat._id) return;
         dispatchMessages({ type: "ADD_MESSAGE", payload: message });
-      });
+      };
+   
+      socket.on("getMessage", handleGetMessage);
+   
+      return () => {
+        socket.off("getMessage", handleGetMessage);
+      };
     }
-  }, [socket, dispatchMessages, currentChat._id]);
-  
+   }, [socket, dispatchMessages, currentChat._id]);
+
   return (
     <ChatContext.Provider
       value={{
@@ -133,6 +146,7 @@ export const ChatContextProvider = ({ children, user }: ChatContextProps) => {
         dispatchMessages,
         currentChat,
         onlineUsers,
+        setMessageSend
       }}
     >
       {children}
