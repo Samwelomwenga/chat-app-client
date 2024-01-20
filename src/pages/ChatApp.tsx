@@ -15,6 +15,7 @@ import PotentialChats from "../components/PotentialChats";
 import ChatBox from "../components/ChatBox";
 import useHandleSendTextMessage from "../hooks/useHandleSendTextMessage";
 import Chats from "../components/Chats";
+import { useNavigate } from "react-router-dom";
 
 export type Chat = {
   _id: string;
@@ -29,6 +30,7 @@ export type UserChats = {
 };
 
 function ChatApp() {
+  const navigate=useNavigate()
   const authContext = useContext(AuthContext);
   const user = authContext?.postState.user || {
     id: "",
@@ -36,13 +38,19 @@ function ChatApp() {
     email: "",
     token: "",
   };
-  const logoutUser = authContext?.logoutUser;
+  const postDispatch = authContext?.postDispatch;
   const chatContext = useContext(ChatContext);
   const currentChat = chatContext.currentChat;
 
   const [textMessage, setTextMessage] = useState("");
   const resetTextMessage = () => setTextMessage("");
   const handleSendTextMessage = useHandleSendTextMessage();
+
+  const logoutUser=()=>{
+    localStorage.removeItem("user")
+    postDispatch?.({type:"POST_USER_INFO_RESET"})
+    navigate("/login")
+  }
 
   return (
     <Box sx={{ height: "100vh", position: "relative" }}>
@@ -72,7 +80,7 @@ function ChatApp() {
           </Typography>
         </Box>
         <Button
-          onClick={() => logoutUser && logoutUser()}
+          onClick={() => logoutUser()}
           variant="text"
           sx={{
             ml: "auto",
