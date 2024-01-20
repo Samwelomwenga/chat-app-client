@@ -1,103 +1,67 @@
-import { useContext, useReducer } from "react";
-import {
-  Avatar,
-  SpeedDial,
-  SpeedDialAction,
-  SpeedDialIcon,
-} from "@mui/material";
-import { StyledBadge } from "./UserChat";
-import stringAvatar from "../utils/functions/stringAvatar";
+import { useContext, useState } from "react";
+import { Fab, Menu } from "@mui/material";
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import { ChatContext } from "../context/ChatContext";
-import { baseUrl, postRequest } from "../utils/services";
-import fetchChatsReducer from "../utils/functions/fetchChatsReducer";
-import { fetchChatsInitialState } from "../hooks/useFetch";
-import { AuthContext } from "../context/AuthContext";
-import { UserChats } from "../pages/ChatApp";
-import axios from "axios";
-
-export type AxiosError = {
-  response?: {
-    data: {
-      message: string;
-    };
-  };
-};
+import PotentialChat from "./PotentialChat";
 
 function PotentialChats() {
   const chatContext = useContext(ChatContext);
   const potentialChats = chatContext.potentialChatUsersState.potentialChatUsers;
-  const authContext = useContext(AuthContext);
-  const user = authContext?.postState.user || {
-    id: "",
-    name: "",
-    email: "",
-    token: "",
+
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
   };
 
-  const [ ,dispatchFetchChats] = useReducer(
-    fetchChatsReducer,
-    fetchChatsInitialState
-  );
-
-  const handleCreateChat=async(firstId:string,secondId:string)=>{
-    dispatchFetchChats({ type: "FETCH_CHATS_REQUEST" });
-    try {
-      const response= await postRequest<{firstId:string; secondId:string;},UserChats>(`${baseUrl}/chats`,{firstId,secondId});
-      dispatchFetchChats({ type: "FETCH_CHATS_SUCCESS", payload: response });
-      
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        const message = axiosError.response?.data.message ;
-        console.log(message)
-        dispatchFetchChats({ type: "FETCH_CHATS_FAIL", payload: {message:message||"",isError:true} });
-       
-      } else {
-        const e = error as Error;
-        dispatchFetchChats({ type: "FETCH_CHATS_FAIL", payload: {message:e.message||"",isError:true} });
-      }
-      
-
-    }
-
-  }
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
-    <SpeedDial
-      ariaLabel="potential chat users speed dial"
-      sx={{
-        position: "fixed",
-        bottom: 66,
-        right: 10,
-        "& .MuiSpeedDial-actions": {
-          transform: "translateX(-10rem)",
-        },
-      }}
-      icon={<SpeedDialIcon />}
-    >
-      {potentialChats.map((potentialChat, index) => (
-        <SpeedDialAction
-          sx={{
-            "& .MuiSpeedDialAction-staticTooltipLabel": {
-              textWrap: "nowrap",
-              width: "150px",
-              backgroundColor: "grey",
-              color: "white",
-            },
-          }}
-          key={index}
-          icon={
-            <StyledBadge>
-              <Avatar {...stringAvatar(potentialChat.name || "Anonyms")} />
-            </StyledBadge>
-          }
-          tooltipTitle={potentialChat.name}
-          tooltipOpen={true}
-          tooltipPlacement="right"
-          onClick={()=>handleCreateChat(user.id,potentialChat._id)}
-        />
-      ))}
-    </SpeedDial>
+    <>
+      <Fab
+        color="primary"
+        aria-label="add"
+        sx={{
+          position: "fixed",
+          bottom: "5.5rem",
+          right: { xs: "1rem", md: "3rem" },
+        }}
+        onClick={handleClick}
+      >
+        <ChatBubbleIcon />
+      </Fab>
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        sx={{
+          position: "fixed",
+          top: "-1rem",
+          left: { xs: "-1rem", md: "-2rem" },
+          maxHeight: "70%",
+          px: "3rem",
+        }}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+      >
+        {potentialChats.map((potentialChat, index) => (
+          <PotentialChat
+            key={index}
+            potentialChat={potentialChat}
+            handleClose={handleClose}
+          />
+        ))}
+      </Menu>
+    </>
   );
 }
 
