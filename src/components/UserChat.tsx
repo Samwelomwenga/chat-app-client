@@ -88,10 +88,7 @@ function UserChat({ chat, user }: { chat: Chat; user: User }) {
       ) : (
         <Box sx={{ display: "flex", alignItems: "flex-start" }}>
           <AvatarGroup>
-            <Box
-              sx={{ "& :hover": { cursor: "pointer" } }}
-              onClick={() => updateCurrentChat(chat)}
-            >
+            <Box onClick={() => updateCurrentChat(chat)}>
               <UserBadge recipientName={recipientName} isOnline={isOnline} />
             </Box>
           </AvatarGroup>

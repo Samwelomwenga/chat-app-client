@@ -1,11 +1,9 @@
 import { useContext, useState } from "react";
 import {
   Avatar,
-  
   Box,
   Button,
   InputAdornment,
-  
   TextField,
   Typography,
 } from "@mui/material";
@@ -52,9 +50,9 @@ function ChatApp() {
         sx={{
           bgcolor: "primary.dark",
           p: "1.5rem",
-          mb: {xs:"1.5rem",md:"0"},
-          px:{
-            md:"7.5rem",
+          mb: { xs: "1.5rem", md: "0" },
+          px: {
+            md: "7.5rem",
           },
           width: "100%",
           display: "flex",
@@ -86,47 +84,48 @@ function ChatApp() {
           Log out
         </Button>
       </Box>
-      <Box sx={{display:{md:"grid"},gridTemplateColumns:"1fr 3fr"}}>
-     <Chats/>
-      <Box>
-        <ChatBox />
+      <Box sx={{ display: { md: "grid" }, gridTemplateColumns: "1fr 3fr" }}>
+        <Chats />
+        <Box>
+          <ChatBox />
 
-      <PotentialChats />
+          <PotentialChats />
 
-      <TextField
-      value={textMessage}
-        sx={{
-          position: "fixed",
-          bottom: ".2rem",
-          backgroundColor: "lightgrey",
-          width:{
-            xs:"100%",
-            md:"90rem"
-          }
-        }}
-        placeholder="Type Message..."
-        onChange={(e) => setTextMessage(e.target.value)}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <SendRounded
-                color="primary"
-                fontSize="large"
-                sx={{ "& :hover": { cursor: "pointer" } }}
-                onClick={() =>
-                  handleSendTextMessage(
-                    textMessage,
-                    user,
-                    currentChat._id,
-                    resetTextMessage
-                  )
-                }
-              />
-            </InputAdornment>
-          ),
-        }}
-      />
-      </Box>
+          <TextField
+            value={textMessage}
+            sx={{
+              position: "fixed",
+              bottom: ".2rem",
+              backgroundColor: "lightgrey",
+              width: {
+                xs: "100%",
+                md: "90rem",
+              },
+            }}
+            placeholder="Type Message..."
+            onChange={(e) => setTextMessage(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Box sx={{ "& :hover": { cursor: "pointer" },pr:{md:"1rem"}}}>
+                    <SendRounded
+                      color="primary"
+                      fontSize="large"
+                      onClick={() =>
+                        handleSendTextMessage(
+                          textMessage,
+                          user,
+                          currentChat._id,
+                          resetTextMessage
+                        )
+                      }
+                    />
+                  </Box>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Box>
       </Box>
     </Box>
   );
