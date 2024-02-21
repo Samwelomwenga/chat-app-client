@@ -1,16 +1,34 @@
 import axios from "axios";
 export const baseUrl = "http://localhost:3000/api";
+type ErrorMessages = {
+  message: string;
+};
 
-export const postRequest = async <T, V>(url: string, body: T): Promise<V> => {
+type PostResponse<V> =
+  | {
+      data: V;
+    }
+  | ErrorMessages;
+export const postRequest = async <T, V>(
+  url: string,
+  body: T
+): Promise<PostResponse<V>> => {
   try {
     const headers = {
       headers: {
         "Content-Type": "application/json",
       },
     };
-    const { data } = await axios.post<T>(url, JSON.stringify(body), headers);
+    const response = await axios.post<PostResponse<V>>(
+      url,
+      JSON.stringify(body),
+      headers
+    );
+    if ("message" in response.data) {
+      console.log(response.data.message);
+    }
 
-    return data as unknown as V;
+    return { data: response.data as V };
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(error.message);
