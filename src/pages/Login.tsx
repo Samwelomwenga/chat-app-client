@@ -15,8 +15,6 @@ import {
   UserPayload as User,
 } from "../context/AuthContext";
 import { baseUrl, postRequest } from "../utils/services";
-import axios from "axios";
-import { AxiosError } from "../components/PotentialChat";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,8 +22,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 function Login() {
   const authContext = useContext(AuthContext);
   const postDispatch = authContext?.postDispatch;
+  const postState = authContext?.postState;
   const loginInfo = authContext?.loginInfo;
   const loginInfoDispatch = authContext?.loginInfoDispatch;
+
+  const error = postState?.error;
 
   const loginSchema = z.object({
     email: z
@@ -56,26 +57,26 @@ function Login() {
           `${baseUrl}/users/login`,
           data
         );
+        console.log("res", res);
         if ("message" in res) {
           console.log("res.message", res.message);
-          postDispatch?.({
-            type: "POST_USER_INFO_FAIL",
-            payload: { message: res.message, isError: true },
-          });
-          return;
+          throw new Error(res.message);
         }
-        console.log("res.data", res.data);
         postDispatch?.({ type: "POST_USER_INFO_SUCCESS", payload: res.data });
         localStorage.setItem("user", JSON.stringify(res.data));
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          const axiosError = error as AxiosError;
-          const message = axiosError.response?.data.message;
+      } catch (e) {
+        const error = e as Error;
+        console.log("error", error);
+        if (error.message === "Request failed with status code 400") {
           postDispatch?.({
             type: "POST_USER_INFO_FAIL",
-            payload: { message: message || "", isError: true },
+            payload: { message: "Invalid Credentials", isError: true },
           });
         }
+        postDispatch?.({
+          type: "POST_USER_INFO_FAIL",
+          payload: { message: error.message, isError: true },
+        });
       }
     }
   };
@@ -171,6 +172,9 @@ function Login() {
               <Typography sx={{ color: "red" }}>
                 {errors.password.message}
               </Typography>
+            )}
+            {error?.isError && (
+              <Typography sx={{ color: "red",textAlign:"center",pt:"1rem" }}>{error.message}</Typography>
             )}
             <Button
               type="submit"

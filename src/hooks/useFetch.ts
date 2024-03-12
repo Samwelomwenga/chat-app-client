@@ -52,6 +52,7 @@ const useFetch = (user:User) => {
       ignore = true;
     };
   }, [user.id]);
+  console.log("user chats inside hook",fetchChatsState.userChats);
   return fetchChatsState;
 };
 

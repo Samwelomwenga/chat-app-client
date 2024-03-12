@@ -15,8 +15,6 @@ import {
   UserPayload,
 } from "../context/AuthContext";
 import { baseUrl, postRequest } from "../utils/services";
-import axios from "axios";
-import { AxiosError } from "../components/PotentialChats";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,6 +24,7 @@ function Register() {
   const userInfo = context?.userInfo;
   const userInfoDispatch = context?.userInfoDispatch;
   const postDispatch = context?.postDispatch;
+  const error = context?.postState.error;
 
   const registerSchema = z.object({
     name: z
@@ -65,19 +64,22 @@ function Register() {
           `${baseUrl}/users/register`,
           data
         );
+        console.log("res", res);
+        if ("message" in res) {
+          throw new Error(res.message);
+        }
 
-        postDispatch?.({ type: "POST_USER_INFO_SUCCESS", payload: res });
+        postDispatch?.({ type: "POST_USER_INFO_SUCCESS", payload: res.data });
         localStorage.setItem("user", JSON.stringify(res));
       }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        const message = axiosError.response?.data.message;
-        postDispatch?.({
-          type: "POST_USER_INFO_FAIL",
-          payload: { message: message || "", isError: true },
-        });
+    } catch (e) {
+      const error = e as Error
+      console.log("error", error);
+      if (error.message) {
+        postDispatch?.({ type: "POST_USER_INFO_FAIL", payload:{message:"User Already Exists",isError:true} });
+        
       }
+     
     }
   };
 
@@ -195,6 +197,7 @@ function Register() {
                 {errors.password.message}
               </Typography>
             )}
+            {error?.isError&&<Typography sx={{ color: "red",textAlign:"center",pt:"1rem" }}>{error.message}</Typography>}
             <Button
               variant="contained"
               fullWidth
