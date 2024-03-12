@@ -69,7 +69,6 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
     postUserInfoReducer,
     postUserInfoInitialState
   );
-
   const loginInfoInitialState: LoginInfoState = {
     email: "",
     password: "",

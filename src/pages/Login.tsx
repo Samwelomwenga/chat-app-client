@@ -16,7 +16,7 @@ import {
 } from "../context/AuthContext";
 import { baseUrl, postRequest } from "../utils/services";
 import axios from "axios";
-import { AxiosError } from "../components/PotentialChats";
+import { AxiosError } from "../components/PotentialChat";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -56,8 +56,17 @@ function Login() {
           `${baseUrl}/users/login`,
           data
         );
-        postDispatch?.({ type: "POST_USER_INFO_SUCCESS", payload: res });
-        localStorage.setItem("user", JSON.stringify(res));
+        if ("message" in res) {
+          console.log("res.message", res.message);
+          postDispatch?.({
+            type: "POST_USER_INFO_FAIL",
+            payload: { message: res.message, isError: true },
+          });
+          return;
+        }
+        console.log("res.data", res.data);
+        postDispatch?.({ type: "POST_USER_INFO_SUCCESS", payload: res.data });
+        localStorage.setItem("user", JSON.stringify(res.data));
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const axiosError = error as AxiosError;
@@ -136,7 +145,11 @@ function Login() {
                 })
               }
             />
-            {errors.email && <Typography sx={{color:"red"}}>{errors.email.message}</Typography>}
+            {errors.email && (
+              <Typography sx={{ color: "red" }}>
+                {errors.email.message}
+              </Typography>
+            )}
             <FormLabel sx={{ fontWeight: "bold", fontSize: "1rem" }}>
               Password
             </FormLabel>
@@ -155,7 +168,9 @@ function Login() {
               }
             />
             {errors.password && (
-              <Typography sx={{color:"red"}}>{errors.password.message}</Typography>
+              <Typography sx={{ color: "red" }}>
+                {errors.password.message}
+              </Typography>
             )}
             <Button
               type="submit"
